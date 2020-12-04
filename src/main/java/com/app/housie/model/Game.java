@@ -55,24 +55,25 @@ public class Game {
         log.debug("Starting the game!! ");
         boolean toQuit = false;
         NumberGenerator valueGenerator = new NumberGenerator(0, gameConfig.getEndRange());
-        while (!gameState.isCompleted() || toQuit) {
-            log.info("Enter somehing");
+        while (toQuit) {
+            log.info("Enter One Option : Valid Options are : N -> to get a new Number and Q -> to Quit");
             String input = Utils.getLineFromConsole();
-
             switch (input) {
                 case "Q":
                     toQuit = true;
                     break;
                 case "N":
                     int currentNumber = valueGenerator.getRandomInt();
-                    gameState.updateState(currentNumber);
+                    toQuit = gameState.updateState(currentNumber);
                     break;
                 default:
+                    log.error("Un-recognized option, please try again");
                     break;
             }
 
 
         }
+        gameState.printSummary();
     }
 
 
