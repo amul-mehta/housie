@@ -36,6 +36,7 @@ public class Game {
                             NumberGenerator valueGenerator = new NumberGenerator(1, gameConfig.getEndRange());
                             for (int i = 0; i < board.length; i++) {
                                 Block[] row = board[i];
+                                Arrays.fill(row, Block.builder().build());
                                 int rowSize = row.length;
                                 NumberGenerator positionGenerator = new NumberGenerator(0, rowSize - 1);
                                 for (int j = 0; j < gameConfig.getNumPerRow(); j++) {
@@ -44,18 +45,18 @@ public class Game {
                                     board[i][column] = block;
                                 }
                             }
-                            log.info("Completed Creating ticket for player {}", t);
+                            log.debug("Completed Creating ticket for player {}", t);
                             return Ticket.builder().content(board).player(pl).build();
                         }).collect(Collectors.toList());
-
+        log.info("**** Tickets Created Successfully ****");
         this.gameState = new GameState(winningCombinations, this.tickets);
     }
 
     public void play() {
-        log.debug("Starting the game!! ");
+        log.debug("Starting the game!!");
         boolean toQuit = false;
         NumberGenerator valueGenerator = new NumberGenerator(0, gameConfig.getEndRange());
-        while (toQuit) {
+        while (!toQuit) {
             log.info("Enter One Option : Valid Options are : N -> to get a new Number and Q -> to Quit");
             String input = Utils.getLineFromConsole();
             switch (input) {

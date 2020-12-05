@@ -2,6 +2,7 @@ package com.app.housie.model;
 
 
 import lombok.Getter;
+import java.util.Objects;
 
 @Getter
 public class TopLine implements Combination {
@@ -14,12 +15,17 @@ public class TopLine implements Combination {
     }
 
     @Override
-    public void getName() {
+    public String getName() {
         return name;
     }
 
     @Override
     public boolean evaluate(Ticket ticket) {
-        return false;
+        Block[][] blocks = ticket.getContent();
+        for (Block element : blocks[0]) {
+            if (Objects.isNull(element.getNumber()) || !element.isSelected())
+                return false;
+        }
+        return true;
     }
 }
