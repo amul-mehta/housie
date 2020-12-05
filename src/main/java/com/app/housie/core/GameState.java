@@ -1,5 +1,9 @@
-package com.app.housie.model;
+package com.app.housie.core;
 
+import com.app.housie.model.Block;
+import com.app.housie.core.combination.WinningCombination;
+import com.app.housie.model.Player;
+import com.app.housie.model.Ticket;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -7,18 +11,18 @@ import java.util.*;
 @Slf4j
 public class GameState {
     // status of game, is it completed, keep track of numbers that are generated, remaining, etc.
-    List<Combination> combinations;
-    Map<Combination, Set<Player>> currentState;
+    List<WinningCombination> winningCombinations;
+    Map<WinningCombination, Set<Player>> currentState;
     List<Ticket> tickets;
 
-    public GameState(List<Combination> combinations, List<Ticket> tickets) {
-        this.combinations = combinations;
+    public GameState(List<WinningCombination> winningCombinations, List<Ticket> tickets) {
+        this.winningCombinations = winningCombinations;
         this.tickets = tickets;
         currentState = new HashMap<>();
     }
 
     boolean isCompleted() {
-        return currentState.size() == combinations.size();
+        return currentState.size() == winningCombinations.size();
     }
 
     public boolean updateState(int number) {
@@ -28,7 +32,7 @@ public class GameState {
     }
 
     private void updateCombinations(Ticket matchingTicket) {
-        combinations.forEach(c -> {
+        winningCombinations.forEach(c -> {
             if (c.evaluate(matchingTicket)) {
                 if (!currentState.containsKey(c))
                     currentState.put(c, new HashSet<>());
@@ -63,11 +67,11 @@ public class GameState {
 
     public void printSummary() {
         Map<String, Set<String>> playerCombinationMap = new HashMap<>();
-        currentState.forEach((combination, players) -> {
+        currentState.forEach((winningCombination, players) -> {
             players.forEach(player -> {
                 if (!playerCombinationMap.containsKey(player.getName()))
                     playerCombinationMap.put(player.getName(), new HashSet<>());
-                playerCombinationMap.get(player.getName()).add(combination.getName());
+                playerCombinationMap.get(player.getName()).add(winningCombination.getName());
 
             });
         });

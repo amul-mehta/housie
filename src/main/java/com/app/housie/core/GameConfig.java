@@ -1,7 +1,7 @@
-package com.app.housie.model;
+package com.app.housie.core;
 
 
-import com.app.housie.Utils;
+import com.app.housie.commons.Utils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +23,6 @@ public class GameConfig {
         setBoardSize(ticketSize);
         log.info("Enter Numbers per Row");
         this.numPerRow = Utils.getIntFromConsole();
-
     }
 
     private void setBoardSize(String ticketSize) {

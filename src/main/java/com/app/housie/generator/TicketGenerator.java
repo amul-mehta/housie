@@ -1,4 +1,6 @@
-package com.app.housie.model;
+package com.app.housie.generator;
+
+import com.app.housie.model.Ticket;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.app.housie;
+package com.app.housie.commons;
 
 import java.util.Scanner;
 

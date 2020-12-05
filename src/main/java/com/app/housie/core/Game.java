@@ -1,6 +1,10 @@
-package com.app.housie.model;
+package com.app.housie.core;
 
-import com.app.housie.Utils;
+import com.app.housie.commons.Utils;
+import com.app.housie.core.combination.TopLine;
+import com.app.housie.core.combination.WinningCombination;
+import com.app.housie.generator.NumberGenerator;
+import com.app.housie.model.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +18,16 @@ import java.util.stream.IntStream;
 @Setter
 @Slf4j
 public class Game {
+    public static final String QUIT = "Q";
+    public static final String NEW_NUMBER = "N";
     GameConfig gameConfig;
     List<Ticket> tickets;
-    List<Combination> winningCombinations;
+    List<WinningCombination> winningWinningCombinations;
     GameState gameState;
 
     public Game() {
         this.gameConfig = new GameConfig();
-        this.winningCombinations = Arrays.asList(new TopLine());
+        this.winningWinningCombinations = Arrays.asList(new TopLine());
         initialize();
     }
 
@@ -49,7 +55,7 @@ public class Game {
                             return Ticket.builder().content(board).player(pl).build();
                         }).collect(Collectors.toList());
         log.info("**** Tickets Created Successfully ****");
-        this.gameState = new GameState(winningCombinations, this.tickets);
+        this.gameState = new GameState(winningWinningCombinations, this.tickets);
     }
 
     public void play() {
@@ -60,11 +66,13 @@ public class Game {
             log.info("Enter One Option : Valid Options are : N -> to get a new Number and Q -> to Quit");
             String input = Utils.getLineFromConsole();
             switch (input) {
-                case "Q":
+                // TODO: Make this quittable at all the time not just when playing.
+                case QUIT:
                     toQuit = true;
                     break;
-                case "N":
+                case NEW_NUMBER:
                     int currentNumber = valueGenerator.getRandomInt();
+                    log.info("");
                     toQuit = gameState.updateState(currentNumber);
                     break;
                 default:

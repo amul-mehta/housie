@@ -1,11 +1,13 @@
-package com.app.housie.model;
+package com.app.housie.core.combination;
 
 
+import com.app.housie.model.Block;
+import com.app.housie.model.Ticket;
 import lombok.Getter;
 import java.util.Objects;
 
 @Getter
-public class TopLine implements Combination {
+public class TopLine implements WinningCombination {
     String name;
 
 

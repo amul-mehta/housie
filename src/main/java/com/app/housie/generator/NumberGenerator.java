@@ -1,4 +1,4 @@
-package com.app.housie.model;
+package com.app.housie.generator;
 
 import java.util.Collections;
 import java.util.List;
