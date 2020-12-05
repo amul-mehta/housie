@@ -29,8 +29,8 @@ public class GameConfig {
         if (ticketSize.length() > 0) {
             String[] splits = ticketSize.split(Constants.TICKET_SIZE_SPLIT_STR);
             boardSize = new int[Constants.BOARD_DIMENSION_SIZE];
-            boardSize[0] = Integer.parseInt(splits[0]);
-            boardSize[1] = Integer.parseInt(splits[1]);
+            boardSize[0] = Integer.parseInt(splits[0].trim());
+            boardSize[1] = Integer.parseInt(splits[1].trim());
         }
     }
 }

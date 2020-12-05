@@ -1,5 +1,6 @@
 package com.app.housie.core;
 
+import com.app.housie.commons.Constants;
 import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.model.Block;
 import com.app.housie.model.Player;
@@ -8,17 +9,17 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+
 @Slf4j
 public class GameState {
-    // status of game, is it completed, keep track of numbers that are generated, remaining, etc.
-    List<WinningCombination> winningCombinations;
-    Map<WinningCombination, Set<Player>> currentState;
-    List<Ticket> tickets;
+    private final List<WinningCombination> winningCombinations;
+    private final Map<WinningCombination, Player> currentState;
+    private final List<Ticket> tickets;
 
     public GameState(List<WinningCombination> winningCombinations, List<Ticket> tickets) {
         this.winningCombinations = winningCombinations;
         this.tickets = tickets;
-        currentState = new HashMap<>();
+        this.currentState = new HashMap<>();
     }
 
     boolean isCompleted() {
@@ -33,17 +34,15 @@ public class GameState {
 
     private void updateCombinations(Ticket matchingTicket) {
         winningCombinations.forEach(c -> {
-            if (c.evaluate(matchingTicket)) {
-                if (!currentState.containsKey(c))
-                    currentState.put(c, new HashSet<>());
-                currentState.get(c).add(matchingTicket.getPlayer());
+            if (!currentState.containsKey(c) && c.evaluate(matchingTicket)) {
+                currentState.put(c, matchingTicket.getPlayer());
                 log.info("We have a winner: {} has won '{}' winning combination.", matchingTicket.getPlayer().getName(), c.getName());
             }
         });
     }
 
     private List<Ticket> updateTickets(int number) {
-        List<Ticket> selectedtickets = new ArrayList<>();
+        List<Ticket> selectedTickets = new ArrayList<>();
         boolean found;
         for (Ticket ticket : tickets) {
             found = false;
@@ -53,7 +52,7 @@ public class GameState {
                     Integer num = block.getNumber();
                     if (Objects.nonNull(num) && num.equals(number)) {
                         block.setSelected(true);
-                        selectedtickets.add(ticket);
+                        selectedTickets.add(ticket);
                         found = true;
                         break;
                     }
@@ -63,25 +62,22 @@ public class GameState {
             }
         }
 
-        return selectedtickets;
+        return selectedTickets;
     }
 
     public void printSummary() {
         Map<String, Set<String>> playerCombinationMap = new HashMap<>();
-        currentState.forEach((winningCombination, players) -> {
-            players.forEach(player -> {
-                if (!playerCombinationMap.containsKey(player.getName()))
-                    playerCombinationMap.put(player.getName(), new HashSet<>());
-                playerCombinationMap.get(player.getName()).add(winningCombination.getName());
-
-            });
+        currentState.forEach((winningCombination, player) -> {
+            if (!playerCombinationMap.containsKey(player.getName()))
+                playerCombinationMap.put(player.getName(), new HashSet<>());
+            playerCombinationMap.get(player.getName()).add(winningCombination.getName());
         });
         tickets.stream().map(Ticket::getPlayer).forEach(player -> {
             Set<String> combinationsWon = playerCombinationMap.getOrDefault(player.getName(), new HashSet<>());
 
-            String combinationWonString = String.join(" and ", combinationsWon);
-            if (combinationWonString.length() == 0) {
-                combinationWonString = "Nothing";
+            String combinationWonString = String.join(Constants.COMBINATION_WON_DELIMITER, combinationsWon);
+            if (combinationWonString.isEmpty()) {
+                combinationWonString = Constants.NOTHING_WON;
             }
             log.info("{} : {}", player.getName(), combinationWonString);
         });
