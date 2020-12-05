@@ -1,6 +1,8 @@
 package com.app.housie.core;
 
+import com.app.housie.commons.Constants;
 import com.app.housie.commons.Utils;
+import com.app.housie.core.combination.EarlyFive;
 import com.app.housie.core.combination.TopLine;
 import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.generator.NumberGenerator;
@@ -18,8 +20,7 @@ import java.util.stream.IntStream;
 @Setter
 @Slf4j
 public class Game {
-    public static final String QUIT = "Q";
-    public static final String NEW_NUMBER = "N";
+
     GameConfig gameConfig;
     List<Ticket> tickets;
     List<WinningCombination> winningWinningCombinations;
@@ -27,7 +28,7 @@ public class Game {
 
     public Game() {
         this.gameConfig = new GameConfig();
-        this.winningWinningCombinations = Arrays.asList(new TopLine());
+        this.winningWinningCombinations = Arrays.asList(new TopLine(), new EarlyFive());
         initialize();
     }
 
@@ -66,13 +67,13 @@ public class Game {
             log.info("Enter One Option : Valid Options are : N -> to get a new Number and Q -> to Quit");
             String input = Utils.getLineFromConsole();
             switch (input) {
-                // TODO: Make this quittable at all the time not just when playing.
-                case QUIT:
+                // TODO: Make this quittable at all the time not just when playing
+                case Constants.QUIT:
                     toQuit = true;
                     break;
-                case NEW_NUMBER:
+                case Constants.NEW_NUMBER:
                     int currentNumber = valueGenerator.getRandomInt();
-                    log.info("");
+                    log.info("Next number is: {}", currentNumber);
                     toQuit = gameState.updateState(currentNumber);
                     break;
                 default:

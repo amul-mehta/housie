@@ -1,7 +1,7 @@
 package com.app.housie.core;
 
-import com.app.housie.model.Block;
 import com.app.housie.core.combination.WinningCombination;
+import com.app.housie.model.Block;
 import com.app.housie.model.Player;
 import com.app.housie.model.Ticket;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +37,7 @@ public class GameState {
                 if (!currentState.containsKey(c))
                     currentState.put(c, new HashSet<>());
                 currentState.get(c).add(matchingTicket.getPlayer());
+                log.info("We have a winner: {} has won '{}' winning combination.", matchingTicket.getPlayer().getName(), c.getName());
             }
         });
     }

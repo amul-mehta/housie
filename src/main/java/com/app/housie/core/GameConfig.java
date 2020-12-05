@@ -1,6 +1,6 @@
 package com.app.housie.core;
 
-
+import com.app.housie.commons.Constants;
 import com.app.housie.commons.Utils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @Slf4j
 public class GameConfig {
-    int[] boardSize = new int[]{3, 10};
+    int[] boardSize = new int[]{Constants.DEFAULT_TICKET_ROW_SIZE, Constants.DEFAULT_TICKET_COLUMN_SIZE};
     int numOfPlayers;
     int numPerRow;
     int endRange;
@@ -27,8 +27,8 @@ public class GameConfig {
 
     private void setBoardSize(String ticketSize) {
         if (ticketSize.length() > 0) {
-            String[] splits = ticketSize.split("X");
-            boardSize = new int[2];
+            String[] splits = ticketSize.split(Constants.TICKET_SIZE_SPLIT_STR);
+            boardSize = new int[Constants.BOARD_DIMENSION_SIZE];
             boardSize[0] = Integer.parseInt(splits[0]);
             boardSize[1] = Integer.parseInt(splits[1]);
         }
