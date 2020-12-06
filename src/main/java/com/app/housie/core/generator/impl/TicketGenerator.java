@@ -16,7 +16,7 @@ public class TicketGenerator implements Generator<Block[][]> {
     }
 
     public Block[][] generate() {
-        int[] boardSize = gameConfig.getBoardSize();
+        int[] boardSize = gameConfig.getTicketSize();
         int rowCount = boardSize[0];
         int columnCount = boardSize[1];
         Block[][] board = new Block[rowCount][columnCount];

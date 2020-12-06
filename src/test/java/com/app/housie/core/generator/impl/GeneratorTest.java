@@ -17,7 +17,7 @@ public class GeneratorTest {
         NumberGenerator numberGenerator = GeneratorFactory.getNumberGenerator(min, max);
         Assert.assertNotNull(numberGenerator.getRemainingNumbers());
         Assert.assertEquals(numberGenerator.getRemainingNumbers().size(), max - min + 1);
-        for (int i = 0; i <= max - min; i++) {
+        for (int i = 0; i < numberGenerator.getRemainingNumbers().size(); i++) {
             int generatedNumber = numberGenerator.generate();
             Assert.assertTrue(generatedNumber >= min && generatedNumber <= max);
         }
@@ -36,7 +36,7 @@ public class GeneratorTest {
     public void testTicketGenerator() {
         ConsoleInputGameConfig consoleInputGameConfig = Mockito.mock(ConsoleInputGameConfig.class);
         when(consoleInputGameConfig.getEndRange()).thenReturn(100);
-        when(consoleInputGameConfig.getBoardSize()).thenReturn(new int[]{3, 5});
+        when(consoleInputGameConfig.getTicketSize()).thenReturn(new int[]{3, 5});
         when(consoleInputGameConfig.getNumOfPlayers()).thenReturn(2);
         when(consoleInputGameConfig.getNumPerRow()).thenReturn(3);
         TicketGenerator ticketGenerator = GeneratorFactory.getTicketGenerator(consoleInputGameConfig);

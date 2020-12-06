@@ -19,7 +19,7 @@ public class ConsoleInputGameConfig implements GameConfig {
     private int numPerRow;
     private int endRange;
     private boolean interrupted;
-    private int[] boardSize = new int[]{Constants.DEFAULT_TICKET_ROW_SIZE, Constants.DEFAULT_TICKET_COLUMN_SIZE};
+    private int[] ticketSize = new int[]{Constants.DEFAULT_TICKET_ROW_SIZE, Constants.DEFAULT_TICKET_COLUMN_SIZE};
 
 
     @Override
@@ -32,8 +32,8 @@ public class ConsoleInputGameConfig implements GameConfig {
         setIntegerValueFromConsole(this::setNumOfPlayers);
         if (interrupted)
             return;
-        log.info("Enter the ticket size in \"ROW X COLUMN\" format (defaults to 3 X 10, press return to keep default value)");
-        setBoardSize();
+        log.info("Enter the ticket size in  \"<ROW_SIZE>X<COLUMN_SIZE>\" format (defaults to 3 X 10, press return to keep default value)");
+        setTicketSize();
         if (interrupted)
             return;
         log.info("Enter Numbers per Row");
@@ -59,7 +59,7 @@ public class ConsoleInputGameConfig implements GameConfig {
         }
     }
 
-    private void setBoardSize() {
+    private void setTicketSize() {
         boolean toQuit = false;
         while (!toQuit) {
             String boardSizeStr = Utils.getLineFromConsole();
@@ -72,9 +72,9 @@ public class ConsoleInputGameConfig implements GameConfig {
                     if (splits.length != 2) {
                         throw new InputMismatchException("Input String is not properly formatted");
                     }
-                    boardSize = new int[Constants.TICKET_DIMENSION_SIZE];
-                    boardSize[0] = Integer.parseInt(splits[0].trim());
-                    boardSize[1] = Integer.parseInt(splits[1].trim());
+                    ticketSize = new int[Constants.TICKET_DIMENSION_SIZE];
+                    ticketSize[0] = Integer.parseInt(splits[0].trim());
+                    ticketSize[1] = Integer.parseInt(splits[1].trim());
                     toQuit = true;
                 }
             } catch (NumberFormatException numberFormatException) {
