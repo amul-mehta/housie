@@ -1,4 +1,6 @@
-package com.app.housie.core.generator;
+package com.app.housie.core.generator.impl;
+
+import com.app.housie.core.generator.Generator;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,10 +8,10 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
-public class NumberGenerator {
+public class NumberGenerator implements Generator<Integer> {
     private final List<Integer> remainingNumbers;
 
-    public NumberGenerator(int min, int max) {
+    NumberGenerator(int min, int max) {
         remainingNumbers =
                 IntStream.rangeClosed(min, max)
                         .boxed()
@@ -18,7 +20,8 @@ public class NumberGenerator {
         Collections.shuffle(remainingNumbers);
     }
 
-    public int getRandomInt() {
+    @Override
+    public Integer generate() {
         return remainingNumbers.remove(remainingNumbers.size() - 1);
     }
 }

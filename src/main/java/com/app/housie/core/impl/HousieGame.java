@@ -6,8 +6,9 @@ import com.app.housie.core.Game;
 import com.app.housie.core.combination.EarlyFive;
 import com.app.housie.core.combination.TopLine;
 import com.app.housie.core.combination.WinningCombination;
-import com.app.housie.core.generator.NumberGenerator;
-import com.app.housie.core.generator.TicketGenerator;
+import com.app.housie.core.generator.impl.GeneratorFactory;
+import com.app.housie.core.generator.impl.NumberGenerator;
+import com.app.housie.core.generator.impl.TicketGenerator;
 import com.app.housie.model.Player;
 import com.app.housie.model.Ticket;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class HousieGame implements Game {
         this.toQuit = gameConfig.isInterrupted();
 
         if (!toQuit) {
-            this.ticketGenerator = new TicketGenerator(gameConfig);
+            this.ticketGenerator = GeneratorFactory.getTicketGenerator(gameConfig);
 
             List<Ticket> tickets =
                     IntStream.range(0, gameConfig.getNumOfPlayers())
@@ -57,7 +58,7 @@ public class HousieGame implements Game {
     @Override
     public void play() {
         boolean gameFinished = false;
-        NumberGenerator valueGenerator = new NumberGenerator(0, gameConfig.getEndRange());
+        NumberGenerator valueGenerator = GeneratorFactory.getNumberGenerator(0, gameConfig.getEndRange());
 
         while (!this.toQuit) {
             log.info("Press 'N' generate a new Number");
@@ -67,7 +68,7 @@ public class HousieGame implements Game {
                     this.toQuit = true;
                     break;
                 case Constants.OPTION_NEW_NUMBER:
-                    int currentNumber = valueGenerator.getRandomInt();
+                    int currentNumber = valueGenerator.generate();
                     log.info("Next number is: {}", currentNumber);
                     this.toQuit = gameFinished = gameState.updateState(currentNumber);
                     break;
