@@ -5,13 +5,13 @@ import com.app.housie.commons.Utils;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-@Getter
 @Slf4j
+@Getter
 public class GameConfig {
-    int[] boardSize = new int[]{Constants.DEFAULT_TICKET_ROW_SIZE, Constants.DEFAULT_TICKET_COLUMN_SIZE};
-    int numOfPlayers;
-    int numPerRow;
-    int endRange;
+    private final int numOfPlayers;
+    private final int numPerRow;
+    private final int endRange;
+    private int[] boardSize = new int[]{Constants.DEFAULT_TICKET_ROW_SIZE, Constants.DEFAULT_TICKET_COLUMN_SIZE};
 
     public GameConfig() {
         log.info("Enter the number range (1-n)");

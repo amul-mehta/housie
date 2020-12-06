@@ -5,20 +5,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+
 public class NumberGenerator {
-    List<Integer> allowedNums;
+    private final List<Integer> remainingNumbers;
 
     public NumberGenerator(int min, int max) {
-        allowedNums =
+        remainingNumbers =
                 IntStream.rangeClosed(min, max)
                         .boxed()
                         .collect(Collectors.toList());
-        Collections.shuffle(allowedNums);
+
+        Collections.shuffle(remainingNumbers);
     }
 
     public int getRandomInt() {
-        return allowedNums.remove(allowedNums.size() - 1);
+        return remainingNumbers.remove(remainingNumbers.size() - 1);
     }
-
-
 }

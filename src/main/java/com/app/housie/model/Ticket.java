@@ -2,13 +2,11 @@ package com.app.housie.model;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 
-@Builder
 @Getter
-@ToString
+@Builder
 public class Ticket {
-    Player player;
-    Block[][] content;
+    private final Player player;
+    private final Block[][] content;
 
 }

@@ -1,15 +1,15 @@
 package com.app.housie;
 
-import com.app.housie.core.Game;
+import com.app.housie.core.HousieGame;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class HousieApp {
 
     public static void main(String[] args) {
-        log.info("Starting Housie Game!!");
-        Game game = new Game();
-        game.play();
+        log.info("**** Let's play Housie ****");
+        HousieGame housieGame = new HousieGame();
+        housieGame.play();
     }
 }
 

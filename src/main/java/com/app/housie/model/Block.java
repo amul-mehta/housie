@@ -3,13 +3,11 @@ package com.app.housie.model;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
-@Builder
 @Getter
-@Setter
+@Builder
 public class Block {
-    Integer number;
+    private final Integer number;
     @Builder.Default
-    boolean selected = false;
+    private boolean selected = false;
 }
