@@ -40,7 +40,7 @@ public class ConsoleInputGameConfig implements GameConfig {
         setIntegerValueFromConsole(this::setNumPerRow);
     }
 
-    public void setIntegerValueFromConsole(Consumer<Integer> setter) {
+    private void setIntegerValueFromConsole(Consumer<Integer> setter) {
         boolean toQuit = false;
         while (!toQuit) {
             String rangeStr = Utils.getLineFromConsole();

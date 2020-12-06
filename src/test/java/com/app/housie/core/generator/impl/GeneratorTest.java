@@ -6,6 +6,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.util.Objects;
+
 import static org.mockito.Mockito.when;
 
 public class GeneratorTest {
@@ -36,12 +38,29 @@ public class GeneratorTest {
     public void testTicketGenerator() {
         ConsoleInputGameConfig consoleInputGameConfig = Mockito.mock(ConsoleInputGameConfig.class);
         when(consoleInputGameConfig.getEndRange()).thenReturn(100);
-        when(consoleInputGameConfig.getTicketSize()).thenReturn(new int[]{3, 5});
-        when(consoleInputGameConfig.getNumOfPlayers()).thenReturn(2);
-        when(consoleInputGameConfig.getNumPerRow()).thenReturn(3);
+        int rowCount = 3;
+        int columnCount = 5;
+        int rowNumCount = 3;
+        when(consoleInputGameConfig.getTicketSize()).thenReturn(new int[]{rowCount, columnCount});
+        when(consoleInputGameConfig.getNumPerRow()).thenReturn(rowNumCount);
         TicketGenerator ticketGenerator = GeneratorFactory.getTicketGenerator(consoleInputGameConfig);
         Block[][] generatedTicket = ticketGenerator.generate();
         Assert.assertNotNull(generatedTicket);
+        Assert.assertEquals(generatedTicket.length, rowCount);
+        Assert.assertEquals(generatedTicket[0].length, columnCount);
+
+        for(Block[] blocks : generatedTicket){
+            int count=0;
+            for(Block block: blocks){
+                if(Objects.nonNull(block.getNumber())){
+                    count++;
+                }
+            }
+            Assert.assertEquals(count, rowNumCount);
+        }
+
+
+
         // TODO: add more asserts
     }
 }

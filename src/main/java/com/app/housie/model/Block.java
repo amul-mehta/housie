@@ -9,11 +9,11 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
+
 public class Block {
     private final Integer number;
 
     @Setter
-    @Builder.Default
-    private boolean selected = false;
+    private boolean selected;
 
 }

@@ -1,6 +1,5 @@
 package com.app.housie.core.combination.impl;
 
-
 import com.app.housie.commons.Constants;
 import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.model.Block;

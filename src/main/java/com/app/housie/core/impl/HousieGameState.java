@@ -17,7 +17,8 @@ public class HousieGameState implements GameState {
     private final Map<WinningCombination, Player> currentState;
     private final List<HousieTicket> housieTickets;
 
-    public HousieGameState(List<WinningCombination> winningCombinations, List<HousieTicket> housieTickets) {
+    public HousieGameState(List<WinningCombination> winningCombinations,
+                           List<HousieTicket> housieTickets) {
         this.winningCombinations = winningCombinations;
         this.housieTickets = housieTickets;
         this.currentState = new HashMap<>();

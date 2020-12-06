@@ -20,13 +20,13 @@ public class TicketGenerator implements Generator<Block[][]> {
         int rowCount = boardSize[0];
         int columnCount = boardSize[1];
         Block[][] board = new Block[rowCount][columnCount];
-        NumberGenerator valueGenerator = new NumberGenerator(1, gameConfig.getEndRange());
+        Generator<Integer> valueGenerator = new NumberGenerator(1, gameConfig.getEndRange());
 
         for (int i = 0; i < board.length; i++) {
             Block[] row = board[i];
             Arrays.fill(row, Block.builder().build());
             int rowSize = row.length;
-            NumberGenerator positionGenerator = GeneratorFactory.getNumberGenerator(0, rowSize - 1);
+            Generator<Integer> positionGenerator = GeneratorFactory.getNumberGenerator(0, rowSize - 1);
 
             for (int j = 0; j < gameConfig.getNumPerRow(); j++) {
                 int column = positionGenerator.generate();

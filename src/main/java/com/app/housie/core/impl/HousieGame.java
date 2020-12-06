@@ -7,9 +7,9 @@ import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.core.combination.impl.EarlyFive;
 import com.app.housie.core.combination.impl.FullHouse;
 import com.app.housie.core.combination.impl.TopLine;
+import com.app.housie.core.generator.Generator;
 import com.app.housie.core.generator.impl.GeneratorFactory;
 import com.app.housie.core.generator.impl.NumberGenerator;
-import com.app.housie.core.generator.impl.TicketGenerator;
 import com.app.housie.model.Block;
 import com.app.housie.model.HousieTicket;
 import com.app.housie.model.Player;
@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 public class HousieGame implements Game {
     private static final List<WinningCombination> WINNING_COMBINATIONS = Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
     private final ConsoleInputGameConfig gameConfig;
-    private TicketGenerator ticketGenerator;
+    private Generator<Block[][]> ticketGenerator;
     private HousieGameState gameState;
     private boolean toQuit;
 
@@ -83,7 +83,7 @@ public class HousieGame implements Game {
             }
         }
         if (gameFinished) {
-         log.info("**** Game Over ****");
+            log.info("**** Game Over ****");
             gameState.printSummary();
         }
     }
