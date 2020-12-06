@@ -1,6 +1,8 @@
 package com.app.housie.core.generator.impl;
 
 import com.app.housie.core.generator.Generator;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.stream.IntStream;
 
 
 public class NumberGenerator implements Generator<Integer> {
+    @Getter(AccessLevel.PACKAGE)
     private final List<Integer> remainingNumbers;
 
     NumberGenerator(int min, int max) {

@@ -72,7 +72,7 @@ public class ConsoleInputGameConfig implements GameConfig {
                     if (splits.length != 2) {
                         throw new InputMismatchException("Input String is not properly formatted");
                     }
-                    boardSize = new int[Constants.BOARD_DIMENSION_SIZE];
+                    boardSize = new int[Constants.TICKET_DIMENSION_SIZE];
                     boardSize[0] = Integer.parseInt(splits[0].trim());
                     boardSize[1] = Integer.parseInt(splits[1].trim());
                     toQuit = true;
