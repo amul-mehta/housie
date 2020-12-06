@@ -6,9 +6,7 @@ import java.util.Scanner;
 
 @Slf4j
 public class Utils {
-
-    public static String getLineFromConsole() {
-        Scanner scanner = new Scanner(System.in);
+    public static String getLineFromConsole(Scanner scanner) {
         return scanner.nextLine();
     }
 

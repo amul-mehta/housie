@@ -3,6 +3,8 @@ package com.app.housie.core.impl;
 import com.app.housie.commons.Constants;
 import com.app.housie.commons.Utils;
 import com.app.housie.core.Game;
+import com.app.housie.core.GameConfig;
+import com.app.housie.core.GameState;
 import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.core.combination.impl.EarlyFive;
 import com.app.housie.core.combination.impl.FullHouse;
@@ -11,33 +13,38 @@ import com.app.housie.core.generator.Generator;
 import com.app.housie.core.generator.impl.GeneratorFactory;
 import com.app.housie.core.generator.impl.NumberGenerator;
 import com.app.housie.model.Block;
+import com.app.housie.model.HousieParams;
 import com.app.housie.model.HousieTicket;
 import com.app.housie.model.Player;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Slf4j
 public class HousieGame implements Game {
     private static final List<WinningCombination> WINNING_COMBINATIONS = Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
-    private final ConsoleInputGameConfig gameConfig;
+    private static final Scanner CONSOLE_INPUT_SCANNER = new Scanner(System.in);
+
+    private final GameConfig<HousieParams> gameConfig;
     private Generator<Block[][]> ticketGenerator;
-    private HousieGameState gameState;
+    private GameState<Integer> gameState;
     private boolean toQuit;
 
     public HousieGame() {
         this.gameConfig = new ConsoleInputGameConfig();
-        this.gameConfig.init();
+        this.gameConfig.init(CONSOLE_INPUT_SCANNER);
         this.toQuit = gameConfig.isInterrupted();
 
         if (!toQuit) {
-            this.ticketGenerator = GeneratorFactory.getTicketGenerator(gameConfig);
+            HousieParams housieParams = gameConfig.getParams();
+            this.ticketGenerator = GeneratorFactory.getTicketGenerator(housieParams);
 
             List<HousieTicket> housieTickets =
-                    IntStream.range(0, gameConfig.getNumOfPlayers())
+                    IntStream.range(0, housieParams.getNumOfPlayers())
                             .mapToObj(this::generateHousieTicket)
                             .collect(Collectors.toList());
 
@@ -63,19 +70,21 @@ public class HousieGame implements Game {
     @Override
     public void play() {
         boolean gameFinished = false;
-        NumberGenerator valueGenerator = GeneratorFactory.getNumberGenerator(1, gameConfig.getEndRange());
+        Generator<Integer> ticketRandomNumberGenerator =
+                GeneratorFactory.getNumberGenerator(1, gameConfig.getParams().getMaxNumRange());
 
         while (!this.toQuit) {
             log.info("Press 'N' generate a new Number");
-            String input = Utils.getLineFromConsole();
+            String input = Utils.getLineFromConsole(CONSOLE_INPUT_SCANNER);
             switch (input) {
                 case Constants.OPTION_QUIT:
                     this.toQuit = true;
                     break;
                 case Constants.OPTION_NEW_NUMBER:
-                    int currentNumber = valueGenerator.generate();
+                    int currentNumber = ticketRandomNumberGenerator.generate();
                     log.info("Next number is: {}", currentNumber);
-                    this.toQuit = gameFinished = gameState.updateState(currentNumber);
+                    gameState.updateState(currentNumber);
+                    this.toQuit = gameFinished = gameState.isCompleted();
                     break;
                 default:
                     log.error("Un-recognized option, please try again");

@@ -1,14 +1,11 @@
 package com.app.housie.core.generator.impl;
 
-import com.app.housie.core.impl.ConsoleInputGameConfig;
 import com.app.housie.model.Block;
+import com.app.housie.model.HousieParams;
 import org.junit.Assert;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.util.Objects;
-
-import static org.mockito.Mockito.when;
 
 public class GeneratorTest {
 
@@ -36,29 +33,35 @@ public class GeneratorTest {
 
     @Test
     public void testTicketGenerator() {
-        ConsoleInputGameConfig consoleInputGameConfig = Mockito.mock(ConsoleInputGameConfig.class);
-        when(consoleInputGameConfig.getEndRange()).thenReturn(100);
+        int maxRange = 100;
         int rowCount = 3;
         int columnCount = 5;
         int rowNumCount = 3;
-        when(consoleInputGameConfig.getTicketSize()).thenReturn(new int[]{rowCount, columnCount});
-        when(consoleInputGameConfig.getNumPerRow()).thenReturn(rowNumCount);
-        TicketGenerator ticketGenerator = GeneratorFactory.getTicketGenerator(consoleInputGameConfig);
+        int numPerRow = 3;
+        HousieParams housieParams =
+                HousieParams.builder()
+                        .maxNumRange(maxRange)
+                        .numOfPlayers(2)
+                        .ticketSize(new int[]{rowCount, columnCount})
+                        .numPerRow(numPerRow)
+                        .build();
+        Assert.assertTrue(housieParams.isValid());
+        TicketGenerator ticketGenerator = GeneratorFactory.getTicketGenerator(housieParams);
+
         Block[][] generatedTicket = ticketGenerator.generate();
         Assert.assertNotNull(generatedTicket);
         Assert.assertEquals(generatedTicket.length, rowCount);
         Assert.assertEquals(generatedTicket[0].length, columnCount);
 
-        for(Block[] blocks : generatedTicket){
-            int count=0;
-            for(Block block: blocks){
-                if(Objects.nonNull(block.getNumber())){
+        for (Block[] blocks : generatedTicket) {
+            int count = 0;
+            for (Block block : blocks) {
+                if (Objects.nonNull(block.getNumber())) {
                     count++;
                 }
             }
-            Assert.assertEquals(count, rowNumCount);
+            Assert.assertEquals(rowNumCount, count);
         }
-
 
 
         // TODO: add more asserts
