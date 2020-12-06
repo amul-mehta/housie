@@ -13,7 +13,6 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @Slf4j
-
 @Setter(AccessLevel.PRIVATE)
 public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
     private HousieParams housieParams;

@@ -11,7 +11,6 @@ import com.app.housie.core.combination.impl.FullHouse;
 import com.app.housie.core.combination.impl.TopLine;
 import com.app.housie.core.generator.Generator;
 import com.app.housie.core.generator.impl.GeneratorFactory;
-import com.app.housie.core.generator.impl.NumberGenerator;
 import com.app.housie.model.Block;
 import com.app.housie.model.HousieParams;
 import com.app.housie.model.HousieTicket;

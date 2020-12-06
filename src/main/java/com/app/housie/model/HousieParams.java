@@ -19,7 +19,7 @@ public class HousieParams implements GameParams {
     @Override
     public boolean isValid(){
         return maxNumRange > 0
-                && numOfPlayers > 0
+                && numOfPlayers > 1
                 && ticketSize.length == 2
                 && ticketSize[0] > 0
                 && ticketSize[1] > 0

@@ -1,6 +1,5 @@
 package com.app.housie.core.generator.impl;
 
-import com.app.housie.core.impl.ConsoleInputGameConfig;
 import com.app.housie.model.HousieParams;
 
 public class GeneratorFactory {

@@ -9,7 +9,6 @@ import lombok.ToString;
 @Getter
 @Builder
 @ToString
-
 public class Block {
     private final Integer number;
 

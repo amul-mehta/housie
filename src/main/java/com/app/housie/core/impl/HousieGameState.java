@@ -6,6 +6,8 @@ import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.model.Block;
 import com.app.housie.model.HousieTicket;
 import com.app.housie.model.Player;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.*;
 @Slf4j
 public class HousieGameState implements GameState<Integer> {
     private final List<WinningCombination> winningCombinations;
+    @Getter(AccessLevel.PACKAGE)
     private final Map<WinningCombination, Player> currentState;
     private final List<HousieTicket> housieTickets;
 
@@ -120,4 +123,3 @@ public class HousieGameState implements GameState<Integer> {
         log.info("=====================================");
     }
 }
-

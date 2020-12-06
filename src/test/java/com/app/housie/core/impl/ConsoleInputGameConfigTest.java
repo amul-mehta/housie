@@ -44,6 +44,7 @@ public class ConsoleInputGameConfigTest {
         consoleInputGameConfig.init(testScanner);
         Assert.assertTrue(consoleInputGameConfig.isInterrupted());
     }
+
     @Test
     public void consoleInput_interrupted3(){
         String maxNum = "90";
@@ -54,6 +55,7 @@ public class ConsoleInputGameConfigTest {
         consoleInputGameConfig.init(testScanner);
         Assert.assertTrue(consoleInputGameConfig.isInterrupted());
     }
+
     @Test
     public void consoleInput_interrupted4(){
         String maxNum = "90";
@@ -67,7 +69,6 @@ public class ConsoleInputGameConfigTest {
         consoleInputGameConfig.init(testScanner);
         Assert.assertTrue(consoleInputGameConfig.isInterrupted());
     }
-
 
     @Test
     public void consoleInput_wrongFormattedTicketSize1(){
@@ -83,7 +84,6 @@ public class ConsoleInputGameConfigTest {
         ConsoleInputGameConfig consoleInputGameConfig = new ConsoleInputGameConfig();
         consoleInputGameConfig.init(testScanner);
         assertConfigNonInterrupted(maxNum, numPlayers, maxNumPerRow, rowCount, colCount, consoleInputGameConfig);
-
     }
 
     @Test
@@ -100,7 +100,6 @@ public class ConsoleInputGameConfigTest {
         ConsoleInputGameConfig consoleInputGameConfig = new ConsoleInputGameConfig();
         consoleInputGameConfig.init(testScanner);
         assertConfigNonInterrupted(maxNum, numPlayers, maxNumPerRow, rowCount, colCount, consoleInputGameConfig);
-
     }
 
     @Test
@@ -117,7 +116,6 @@ public class ConsoleInputGameConfigTest {
         ConsoleInputGameConfig consoleInputGameConfig = new ConsoleInputGameConfig();
         consoleInputGameConfig.init(testScanner);
         assertConfigNonInterrupted(maxNum, numPlayers, maxNumPerRow, rowCount, colCount, consoleInputGameConfig);
-
     }
 
     @Test
@@ -131,9 +129,7 @@ public class ConsoleInputGameConfigTest {
         ConsoleInputGameConfig consoleInputGameConfig = new ConsoleInputGameConfig();
         consoleInputGameConfig.init(testScanner);
         assertConfigNonInterrupted(maxNum, numPlayers, maxNumPerRow, Constants.DEFAULT_TICKET_ROW_SIZE, Constants.DEFAULT_TICKET_COLUMN_SIZE, consoleInputGameConfig);
-
     }
-
 
     private void assertConfigNonInterrupted(String maxNum,
                                             String numPlayers,
