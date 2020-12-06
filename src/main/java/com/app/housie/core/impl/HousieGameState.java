@@ -1,12 +1,11 @@
 package com.app.housie.core.impl;
 
 import com.app.housie.commons.Constants;
-import com.app.housie.core.GameConfig;
 import com.app.housie.core.GameState;
 import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.model.Block;
 import com.app.housie.model.Player;
-import com.app.housie.model.Ticket;
+import com.app.housie.model.HousieTicket;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
@@ -16,11 +15,11 @@ import java.util.*;
 public class HousieGameState implements GameState {
     private final List<WinningCombination> winningCombinations;
     private final Map<WinningCombination, Player> currentState;
-    private final List<Ticket> tickets;
+    private final List<HousieTicket> housieTickets;
 
-    public HousieGameState(List<WinningCombination> winningCombinations, List<Ticket> tickets) {
+    public HousieGameState(List<WinningCombination> winningCombinations, List<HousieTicket> housieTickets) {
         this.winningCombinations = winningCombinations;
-        this.tickets = tickets;
+        this.housieTickets = housieTickets;
         this.currentState = new HashMap<>();
     }
 
@@ -40,21 +39,21 @@ public class HousieGameState implements GameState {
      * @return if all the combinations have been occured (game is complete)
      */
     public boolean updateState(int calledNumber) {
-        List<Ticket> matchingTickets = updateTickets(calledNumber);
-        matchingTickets.forEach(this::updateCombinations);
+        List<HousieTicket> matchingHousieTickets = updateTickets(calledNumber);
+        matchingHousieTickets.forEach(this::updateCombinations);
         return isCompleted();
     }
 
     /**
      * updates currentState if ticket has one or more of available winning combination
      *
-     * @param matchingTicket the ticket that is to be evaluated for winning combination(s)
+     * @param matchingHousieTicket the ticket that is to be evaluated for winning combination(s)
      */
-    private void updateCombinations(Ticket matchingTicket) {
+    private void updateCombinations(HousieTicket matchingHousieTicket) {
         winningCombinations.forEach(c -> {
-            if (!currentState.containsKey(c) && c.evaluate(matchingTicket)) {
-                currentState.put(c, matchingTicket.getPlayer());
-                log.info("We have a winner: {} has won '{}' winning combination.", matchingTicket.getPlayer().getName(), c.getName());
+            if (!currentState.containsKey(c) && c.evaluate(matchingHousieTicket)) {
+                currentState.put(c, matchingHousieTicket.getPlayer());
+                log.info("We have a winner: {} has won '{}' winning combination.", matchingHousieTicket.getPlayer().getName(), c.getName());
             }
         });
     }
@@ -65,13 +64,13 @@ public class HousieGameState implements GameState {
      * @param calledNumber the number to be checked for the ticket
      * @return List of Tickets that have the number in their contents
      */
-    private List<Ticket> updateTickets(int calledNumber) {
-        List<Ticket> selectedTickets = new ArrayList<>();
+    private List<HousieTicket> updateTickets(int calledNumber) {
+        List<HousieTicket> selectedHousieTickets = new ArrayList<>();
         boolean found;
-        for (Ticket ticket : tickets) {
+        for (HousieTicket housieTicket : housieTickets) {
 
             found = false;
-            Block[][] contents = ticket.getContent();
+            Block[][] contents = housieTicket.getTicket();
 
             for (Block[] blocks : contents) {
                 for (Block block : blocks) {
@@ -79,7 +78,7 @@ public class HousieGameState implements GameState {
                     Integer num = block.getNumber();
                     if (Objects.nonNull(num) && num.equals(calledNumber)) {
                         block.setSelected(true);
-                        selectedTickets.add(ticket);
+                        selectedHousieTickets.add(housieTicket);
                         found = true;
                         break;
                     }
@@ -90,7 +89,7 @@ public class HousieGameState implements GameState {
             }
         }
 
-        return selectedTickets;
+        return selectedHousieTickets;
     }
 
     /**
@@ -106,8 +105,10 @@ public class HousieGameState implements GameState {
             playerCombinationMap.get(player.getName()).add(winningCombination.getName());
         });
 
-        tickets.stream()
-                .map(Ticket::getPlayer)
+        log.info("=====================================");
+        log.info("Summary");
+        housieTickets.stream()
+                .map(HousieTicket::getPlayer)
                 .forEach(player -> {
                     Set<String> combinationsWon = playerCombinationMap.getOrDefault(player.getName(), new HashSet<>());
                     String combinationWonString = String.join(Constants.COMBINATION_WON_DELIMITER, combinationsWon);
@@ -116,6 +117,7 @@ public class HousieGameState implements GameState {
                     }
                     log.info("{} : {}", player.getName(), combinationWonString);
                 });
+        log.info("=====================================");
     }
 }
 

@@ -1,14 +1,13 @@
-package com.app.housie.core.combination;
+package com.app.housie.core.combination.impl;
 
 import com.app.housie.commons.Constants;
+import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.model.Block;
-import com.app.housie.model.Ticket;
+import com.app.housie.model.HousieTicket;
 
 import java.util.Objects;
 
 public class EarlyFive implements WinningCombination {
-
-    public static final int EARLY_FIVE_THRESHOLD = 5;
 
     @Override
     public String getName() {
@@ -16,14 +15,14 @@ public class EarlyFive implements WinningCombination {
     }
 
     @Override
-    public boolean evaluate(Ticket ticket) {
-        Block[][] blocks = ticket.getContent();
+    public boolean evaluate(HousieTicket housieTicket) {
+        Block[][] blocks = housieTicket.getTicket();
         int count = 0;
         for (Block[] elements : blocks) {
             for (Block element : elements) {
                 if (Objects.nonNull(element.getNumber()) && element.isSelected()) {
                     count++;
-                    if (count == EARLY_FIVE_THRESHOLD)
+                    if (count == Constants.EARLY_FIVE_THRESHOLD)
                         return true;
                 }
             }

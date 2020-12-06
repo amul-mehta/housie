@@ -1,13 +1,14 @@
-package com.app.housie.core.combination;
+package com.app.housie.core.combination.impl;
 
 
 import com.app.housie.commons.Constants;
+import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.model.Block;
-import com.app.housie.model.Ticket;
-import lombok.Getter;
+import com.app.housie.model.HousieTicket;
+
 import java.util.Objects;
 
-@Getter
+
 public class TopLine implements WinningCombination {
 
     @Override
@@ -16,10 +17,10 @@ public class TopLine implements WinningCombination {
     }
 
     @Override
-    public boolean evaluate(Ticket ticket) {
-        Block[][] blocks = ticket.getContent();
+    public boolean evaluate(HousieTicket housieTicket) {
+        Block[][] blocks = housieTicket.getTicket();
         for (Block element : blocks[0]) {
-            if (Objects.nonNull(element.getNumber()) || !element.isSelected())
+            if (Objects.nonNull(element.getNumber()) && !element.isSelected())
                 return false;
         }
         return true;

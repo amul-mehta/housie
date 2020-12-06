@@ -4,12 +4,16 @@ package com.app.housie.model;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
-@Setter
 @Builder
+@ToString
 public class Block {
-    private Integer number;
+    private final Integer number;
+
+    @Setter
     @Builder.Default
     private boolean selected = false;
+
 }

@@ -1,22 +1,21 @@
 package com.app.housie.core.generator.impl;
 
+import com.app.housie.core.generator.Generator;
 import com.app.housie.core.impl.ConsoleInputGameConfig;
 import com.app.housie.model.Block;
-import com.app.housie.model.Player;
-import com.app.housie.model.Ticket;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 
 @Slf4j
-public class TicketGenerator {
+public class TicketGenerator implements Generator<Block[][]> {
     private final ConsoleInputGameConfig gameConfig;
 
     TicketGenerator(ConsoleInputGameConfig gameConfig) {
         this.gameConfig = gameConfig;
     }
 
-    public Ticket generate(Player player) {
+    public Block[][] generate() {
         int[] boardSize = gameConfig.getBoardSize();
         int rowCount = boardSize[0];
         int columnCount = boardSize[1];
@@ -35,11 +34,7 @@ public class TicketGenerator {
                 board[i][column] = block;
             }
         }
-        log.debug("Completed Creating ticket for player {}", player.getName());
-        return Ticket.builder()
-                .content(board)
-                .player(player)
-                .build();
+        return board;
     }
 
 }

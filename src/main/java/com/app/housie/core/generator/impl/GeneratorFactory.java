@@ -1,7 +1,5 @@
 package com.app.housie.core.generator.impl;
 
-import com.app.housie.core.generator.impl.NumberGenerator;
-import com.app.housie.core.generator.impl.TicketGenerator;
 import com.app.housie.core.impl.ConsoleInputGameConfig;
 
 public class GeneratorFactory {

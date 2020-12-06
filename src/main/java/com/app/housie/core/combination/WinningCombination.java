@@ -1,9 +1,9 @@
 package com.app.housie.core.combination;
 
-import com.app.housie.model.Ticket;
+import com.app.housie.model.HousieTicket;
 
 public interface WinningCombination {
     String getName();
 
-    boolean evaluate(Ticket ticket);
+    boolean evaluate(HousieTicket housieTicket);
 }
