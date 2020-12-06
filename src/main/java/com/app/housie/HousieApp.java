@@ -1,6 +1,6 @@
 package com.app.housie;
 
-import com.app.housie.core.HousieGame;
+import com.app.housie.core.impl.HousieGame;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

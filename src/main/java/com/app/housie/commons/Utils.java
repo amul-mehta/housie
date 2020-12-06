@@ -1,16 +1,17 @@
 package com.app.housie.commons;
 
-import java.util.Scanner;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.Scanner;
+import java.util.function.Consumer;
+
+@Slf4j
 public class Utils {
 
-    public static String getLineFromConsole(){
+    public static String getLineFromConsole() {
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
 
-    public static int getIntFromConsole(){
-        Scanner scanner = new Scanner(System.in);
-        return scanner.nextInt();
-    }
+
 }

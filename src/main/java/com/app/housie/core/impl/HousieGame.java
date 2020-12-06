@@ -1,12 +1,13 @@
-package com.app.housie.core;
+package com.app.housie.core.impl;
 
 import com.app.housie.commons.Constants;
 import com.app.housie.commons.Utils;
+import com.app.housie.core.Game;
 import com.app.housie.core.combination.EarlyFive;
 import com.app.housie.core.combination.TopLine;
 import com.app.housie.core.combination.WinningCombination;
-import com.app.housie.generator.NumberGenerator;
-import com.app.housie.generator.TicketGenerator;
+import com.app.housie.core.generator.NumberGenerator;
+import com.app.housie.core.generator.TicketGenerator;
 import com.app.housie.model.Player;
 import com.app.housie.model.Ticket;
 import lombok.extern.slf4j.Slf4j;
@@ -18,25 +19,30 @@ import java.util.stream.IntStream;
 
 @Slf4j
 public class HousieGame implements Game {
-
-    private final GameState gameState;
-    private final GameConfig gameConfig;
-    private final TicketGenerator ticketGenerator;
+    private final ConsoleInputGameConfig gameConfig;
+    private TicketGenerator ticketGenerator;
+    private HousieGameState gameState;
+    private boolean toQuit;
 
     public HousieGame() {
-        this.gameConfig = new GameConfig();
-        this.ticketGenerator = new TicketGenerator(gameConfig);
+        this.gameConfig = new ConsoleInputGameConfig();
+        this.gameConfig.init();
+        this.toQuit = gameConfig.isInterrupted();
 
-        List<Ticket> tickets =
-                IntStream.range(0, gameConfig.getNumOfPlayers())
-                        .mapToObj(this::generateTicket)
-                        .collect(Collectors.toList());
+        if (!toQuit) {
+            this.ticketGenerator = new TicketGenerator(gameConfig);
 
-        log.info("**** Tickets Created Successfully ****");
+            List<Ticket> tickets =
+                    IntStream.range(0, gameConfig.getNumOfPlayers())
+                            .mapToObj(this::generateTicket)
+                            .collect(Collectors.toList());
 
-        List<WinningCombination> winningCombinations = Arrays.asList(new TopLine(), new EarlyFive());
+            log.info("**** Tickets Created Successfully ****");
 
-        this.gameState = new GameState(winningCombinations, tickets);
+            List<WinningCombination> winningCombinations = Arrays.asList(new TopLine(), new EarlyFive());
+
+            this.gameState = new HousieGameState(winningCombinations, tickets);
+        }
     }
 
     private Ticket generateTicket(int playerCount) {
@@ -50,31 +56,28 @@ public class HousieGame implements Game {
 
     @Override
     public void play() {
-        log.debug("Starting the game!!");
-
-        boolean toQuit = false;
+        boolean gameFinished = false;
         NumberGenerator valueGenerator = new NumberGenerator(0, gameConfig.getEndRange());
 
-        while (!toQuit) {
+        while (!this.toQuit) {
             log.info("Press 'N' generate a new Number");
             String input = Utils.getLineFromConsole();
             switch (input) {
-                // TODO: Make this quittable at all the time not just when playing
                 case Constants.OPTION_QUIT:
-                    toQuit = true;
+                    this.toQuit = true;
                     break;
                 case Constants.OPTION_NEW_NUMBER:
                     int currentNumber = valueGenerator.getRandomInt();
                     log.info("Next number is: {}", currentNumber);
-                    toQuit = gameState.updateState(currentNumber);
+                    this.toQuit = gameFinished = gameState.updateState(currentNumber);
                     break;
                 default:
                     log.error("Un-recognized option, please try again");
                     break;
             }
         }
-
-        gameState.printSummary();
+        if (gameFinished)
+            gameState.printSummary();
     }
 
 

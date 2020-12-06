@@ -1,6 +1,6 @@
-package com.app.housie.generator;
+package com.app.housie.core.generator;
 
-import com.app.housie.core.GameConfig;
+import com.app.housie.core.impl.ConsoleInputGameConfig;
 import com.app.housie.model.Block;
 import com.app.housie.model.Player;
 import com.app.housie.model.Ticket;
@@ -10,9 +10,9 @@ import java.util.Arrays;
 
 @Slf4j
 public class TicketGenerator {
-    private final GameConfig gameConfig;
+    private final ConsoleInputGameConfig gameConfig;
 
-    public TicketGenerator(GameConfig gameConfig) {
+    public TicketGenerator(ConsoleInputGameConfig gameConfig) {
         this.gameConfig = gameConfig;
     }
 
