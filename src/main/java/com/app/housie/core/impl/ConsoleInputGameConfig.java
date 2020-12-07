@@ -78,7 +78,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
             try {
                 if (intStr.equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
-                    this.interrupted = true;
+                    setInterrupted(true);
                 } else {
                     val = Integer.parseInt(intStr);
                     toQuit = true;
@@ -99,7 +99,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
             try {
                 if (boardSizeStr.equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
-                    this.interrupted = true;
+                    setInterrupted(true);
                 } else {
                     // use default value
                     if (boardSizeStr.trim().length() == 0) {

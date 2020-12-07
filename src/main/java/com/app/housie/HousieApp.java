@@ -10,6 +10,7 @@ public class HousieApp {
     public static void main(String[] args) {
         log.info("**** Let's play Housie ****");
         Game housieGame = new HousieGame();
+        housieGame.init();
         housieGame.play();
     }
 }
