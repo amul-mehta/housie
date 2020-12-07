@@ -14,5 +14,6 @@ public class Constants {
     public static final int DEFAULT_TICKET_ROW_SIZE = 3;
     public static final int DEFAULT_TICKET_COLUMN_SIZE = 10;
     public static final int EARLY_FIVE_THRESHOLD = 5;
+    public static final int DEFAULT_MIN_NUM_RANGE = 1;
 
 }

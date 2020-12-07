@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 
+@Getter(AccessLevel.PACKAGE)
 public class NumberGenerator implements Generator<Integer> {
-    @Getter(AccessLevel.PACKAGE)
     private final List<Integer> remainingNumbers;
 
     NumberGenerator(int min, int max) {

@@ -9,6 +9,4 @@ public class Utils {
     public static String getLineFromConsole(Scanner scanner) {
         return scanner.nextLine();
     }
-
-
 }

@@ -15,47 +15,49 @@ import java.util.Scanner;
 @Slf4j
 @Setter(AccessLevel.PRIVATE)
 public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
-    private HousieParams housieParams;
-    @Getter
+    @Getter(AccessLevel.PUBLIC)
     private boolean interrupted;
+    @Getter(AccessLevel.PUBLIC)
+    private HousieParams params;
+    @Getter(AccessLevel.PRIVATE)
     private Scanner inputScanner;
 
     @Override
     public void init(Scanner scanner) {
         boolean toQuit = false;
         while (!toQuit) {
-            this.inputScanner = scanner;
+            setInputScanner(scanner);
             log.info("Enter the number range (1-n)");
             int maxNumRange = getIntegerValueFromConsole();
-            if (interrupted)
+            if (isInterrupted())
                 return;
             log.info("Enter Number of Players playing the game");
             int maxPlayers = getIntegerValueFromConsole();
-            if (interrupted)
+            if (isInterrupted())
                 return;
             log.info("Enter the ticket size in  \"<ROW_SIZE>X<COLUMN_SIZE>\" format (defaults to 3 X 10, press return to keep default value)");
             int[] ticketSize = getTicketSize();
-            if (interrupted)
+            if (isInterrupted())
                 return;
             log.info("Enter Numbers per Row");
             int maxNumsPerRow = getIntegerValueFromConsole();
-            if (!this.interrupted) {
+            if (!isInterrupted()) {
                 if (ticketSize.length == 0)
-                    this.housieParams =
+                    setParams(
                             HousieParams.builder()
                                     .maxNumRange(maxNumRange)
                                     .numOfPlayers(maxPlayers)
                                     .numPerRow(maxNumsPerRow)
-                                    .build();
+                                    .build());
                 else
-                    this.housieParams =
+                    setParams(
                             HousieParams.builder()
                                     .maxNumRange(maxNumRange)
                                     .numOfPlayers(maxPlayers)
                                     .numPerRow(maxNumsPerRow)
                                     .ticketSize(ticketSize)
-                                    .build();
-                toQuit = housieParams.isValid();
+                                    .build());
+                toQuit = getParams().isValid();
                 if (!toQuit)
                     log.warn("The entered config is not valid, cannot proceed, please try again");
             } else {
@@ -64,17 +66,12 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         }
     }
 
-    @Override
-    public HousieParams getParams() {
-        return this.housieParams;
-    }
-
 
     private int getIntegerValueFromConsole() {
         boolean toQuit = false;
         int val = -1;
         while (!toQuit) {
-            String intStr = Utils.getLineFromConsole(this.inputScanner);
+            String intStr = Utils.getLineFromConsole(getInputScanner());
             try {
                 if (intStr.equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
@@ -95,7 +92,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         boolean toQuit = false;
         int[] ticketSize = new int[]{};
         while (!toQuit) {
-            String boardSizeStr = Utils.getLineFromConsole(this.inputScanner);
+            String boardSizeStr = Utils.getLineFromConsole(getInputScanner());
             try {
                 if (boardSizeStr.equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
