@@ -7,13 +7,24 @@ import com.app.housie.model.HousieTicket;
 
 import java.util.Objects;
 
+/**
+ *  Early Five - When a ticket has five of its number called/selected
+ */
 public class EarlyFive implements WinningCombination {
 
+
+    /**
+     * @return the printable name of EarlyFive Combination
+     */
     @Override
     public String getName() {
         return Constants.EARLY_FIVE_NAME;
     }
 
+    /**
+     * @param housieTicket ticket to be evaluated
+     * @return if the ticket has the early five winning combination present in ticket
+     */
     @Override
     public boolean evaluate(HousieTicket housieTicket) {
         Block[][] blocks = housieTicket.getTicket();

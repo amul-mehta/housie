@@ -1,7 +1,6 @@
 package com.app.housie.core.impl;
 
 import com.app.housie.commons.Constants;
-import com.app.housie.commons.Utils;
 import com.app.housie.core.GameConfig;
 import com.app.housie.model.HousieParams;
 import lombok.AccessLevel;
@@ -71,7 +70,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         boolean toQuit = false;
         int val = -1;
         while (!toQuit) {
-            String intStr = Utils.getLineFromConsole(getInputScanner());
+            String intStr = getInputScanner().nextLine();
             try {
                 if (intStr.equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
@@ -92,7 +91,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         boolean toQuit = false;
         int[] ticketSize = new int[]{};
         while (!toQuit) {
-            String boardSizeStr = Utils.getLineFromConsole(getInputScanner());
+            String boardSizeStr = getInputScanner().nextLine();
             try {
                 if (boardSizeStr.equals(Constants.OPTION_QUIT)) {
                     toQuit = true;

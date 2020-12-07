@@ -1,7 +1,6 @@
 package com.app.housie.core.impl;
 
 import com.app.housie.commons.Constants;
-import com.app.housie.commons.Utils;
 import com.app.housie.core.Game;
 import com.app.housie.core.GameConfig;
 import com.app.housie.core.GameState;
@@ -12,7 +11,6 @@ import com.app.housie.core.combination.impl.TopLine;
 import com.app.housie.core.generator.Generator;
 import com.app.housie.core.generator.impl.GeneratorFactory;
 import com.app.housie.core.generator.impl.NumberGenerator;
-import com.app.housie.core.generator.impl.TicketGenerator;
 import com.app.housie.model.Block;
 import com.app.housie.model.HousieParams;
 import com.app.housie.model.HousieTicket;
@@ -67,7 +65,7 @@ public class HousieGame implements Game {
 
         while (!isToQuit()) {
             log.info("Press 'N' generate a new Number");
-            String input = Utils.getLineFromConsole(getConsoleInputScanner());
+            String input = getConsoleInputScanner().nextLine();
             switch (input) {
                 case Constants.OPTION_QUIT:
                     this.toQuit = true;
