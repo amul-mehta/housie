@@ -1,7 +1,9 @@
 package com.app.housie.core.impl;
 
+import com.app.housie.commons.Constants;
 import com.app.housie.core.generator.impl.NumberGenerator;
 import com.app.housie.core.generator.impl.TicketGenerator;
+import com.app.housie.model.Caller;
 import com.app.housie.model.HousieParams;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,26 +29,25 @@ public class HousieGameTest {
         when(consoleInputGameConfig.isInterrupted()).thenReturn(false);
 
         TicketGenerator ticketGenerator = Mockito.mock(TicketGenerator.class);
-        NumberGenerator numberGenerator = Mockito.mock(NumberGenerator.class);
         HousieGameState housieGameState = Mockito.mock(HousieGameState.class);
+        Caller caller = Mockito.mock(Caller.class);
 
         HousieGame housieGame = Mockito.spy(new HousieGame());
         when(housieGame.getGameConfig()).thenReturn(consoleInputGameConfig);
         when(housieGame.getTicketGenerator()).thenReturn(ticketGenerator);
         when(housieGame.getGameState()).thenReturn(housieGameState);
-        doReturn(numberGenerator).when(housieGame).getRandomNumberGeneratorInstance();
+        when(housieGame.getCaller()).thenReturn(caller);
 
-        housieGame.init();
-        Assert.assertFalse(housieGame.isToQuit());
+        Assert.assertTrue(housieGame.init());
 
-        InputStream inputStream = new ByteArrayInputStream("Q".getBytes());
+        InputStream inputStream = new ByteArrayInputStream(Constants.OPTION_QUIT.getBytes());
         try (MockedStatic<HousieGame> dummy = Mockito.mockStatic(HousieGame.class)) {
             dummy.when(HousieGame::getConsoleInputScanner).thenReturn(new Scanner(inputStream));
             housieGame.play();
             Assert.assertTrue(housieGame.isToQuit());
             Mockito.verify(housieGameState, times(0)).printSummary();
             Mockito.verify(housieGameState, times(0)).updateState(any());
-            Mockito.verify(numberGenerator, times(0)).generate();
+            Mockito.verify(caller, times(0)).callNumber();
         }
     }
 
@@ -59,19 +60,18 @@ public class HousieGameTest {
         when(consoleInputGameConfig.isInterrupted()).thenReturn(false);
 
         TicketGenerator ticketGenerator = Mockito.mock(TicketGenerator.class);
-        NumberGenerator numberGenerator = Mockito.mock(NumberGenerator.class);
         HousieGameState housieGameState = Mockito.mock(HousieGameState.class);
+        Caller caller = Mockito.mock(Caller.class);
 
         HousieGame housieGame = Mockito.spy(new HousieGame());
         when(housieGame.getGameConfig()).thenReturn(consoleInputGameConfig);
         when(housieGame.getTicketGenerator()).thenReturn(ticketGenerator);
         when(housieGame.getGameState()).thenReturn(housieGameState);
-        doReturn(numberGenerator).when(housieGame).getRandomNumberGeneratorInstance();
+        when(housieGame.getCaller()).thenReturn(caller);
 
-        housieGame.init();
-        Assert.assertFalse(housieGame.isToQuit());
+        Assert.assertTrue( housieGame.init());
 
-        when(numberGenerator.generate()).thenReturn(10).thenReturn(11).thenReturn(12);
+        when(caller.callNumber()).thenReturn(10).thenReturn(11).thenReturn(12);
         when(housieGameState.isCompleted()).thenReturn(false).thenReturn(false).thenReturn(true);
         InputStream inputStream = new ByteArrayInputStream("A\nN\nN\nN\n".getBytes());
         try (MockedStatic<HousieGame> dummy = Mockito.mockStatic(HousieGame.class)) {
@@ -80,7 +80,7 @@ public class HousieGameTest {
             Assert.assertTrue(housieGame.isToQuit());
             Mockito.verify(housieGameState, times(1)).printSummary();
             Mockito.verify(housieGameState, times(3)).updateState(any());
-            Mockito.verify(numberGenerator, times(3)).generate();
+            Mockito.verify(caller, times(3)).callNumber();
         }
     }
 
@@ -93,19 +93,19 @@ public class HousieGameTest {
         when(consoleInputGameConfig.isInterrupted()).thenReturn(false);
 
         TicketGenerator ticketGenerator = Mockito.mock(TicketGenerator.class);
-        NumberGenerator numberGenerator = Mockito.mock(NumberGenerator.class);
         HousieGameState housieGameState = Mockito.mock(HousieGameState.class);
+        Caller caller = Mockito.mock(Caller.class);
 
         HousieGame housieGame = Mockito.spy(new HousieGame());
         when(housieGame.getGameConfig()).thenReturn(consoleInputGameConfig);
         when(housieGame.getTicketGenerator()).thenReturn(ticketGenerator);
         when(housieGame.getGameState()).thenReturn(housieGameState);
-        doReturn(numberGenerator).when(housieGame).getRandomNumberGeneratorInstance();
+        when(housieGame.getCaller()).thenReturn(caller);
 
-        housieGame.init();
-        Assert.assertFalse(housieGame.isToQuit());
 
-        when(numberGenerator.generate()).thenReturn(10).thenReturn(11).thenReturn(12);
+        Assert.assertTrue(housieGame.init());
+
+        when(caller.callNumber()).thenReturn(10).thenReturn(11).thenReturn(12);
         when(housieGameState.isCompleted()).thenReturn(false).thenReturn(false).thenReturn(false);
         InputStream inputStream = new ByteArrayInputStream("N\nN\nN\nQ".getBytes());
         try (MockedStatic<HousieGame> dummy = Mockito.mockStatic(HousieGame.class)) {
@@ -114,7 +114,7 @@ public class HousieGameTest {
             Assert.assertTrue(housieGame.isToQuit());
             Mockito.verify(housieGameState, times(0)).printSummary();
             Mockito.verify(housieGameState, times(3)).updateState(any());
-            Mockito.verify(numberGenerator, times(3)).generate();
+            Mockito.verify(caller, times(3)).callNumber();
         }
     }
 

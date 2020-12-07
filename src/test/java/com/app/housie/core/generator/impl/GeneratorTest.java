@@ -56,7 +56,7 @@ public class GeneratorTest {
         for (Block[] blocks : generatedTicket) {
             int count = 0;
             for (Block block : blocks) {
-                if (Objects.nonNull(block.getNumber())) {
+                if (Objects.nonNull(block)) {
                     count++;
                 }
             }

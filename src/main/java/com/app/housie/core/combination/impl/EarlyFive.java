@@ -31,7 +31,7 @@ public class EarlyFive implements WinningCombination {
         int count = 0;
         for (Block[] elements : blocks) {
             for (Block element : elements) {
-                if (Objects.nonNull(element.getNumber()) && element.isSelected()) {
+                if (Objects.nonNull(element) && element.isSelected()) {
                     count++;
                     if (count == Constants.EARLY_FIVE_THRESHOLD)
                         return true;

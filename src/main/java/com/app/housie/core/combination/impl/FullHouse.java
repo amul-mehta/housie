@@ -29,7 +29,7 @@ public class FullHouse implements WinningCombination {
         Block[][] blocks = housieTicket.getTicket();
         for (Block[] elements : blocks) {
             for (Block element : elements) {
-                if (Objects.nonNull(element.getNumber()) && !element.isSelected()) {
+                if (Objects.nonNull(element) && !element.isSelected()) {
                     return false;
                 }
             }

@@ -13,6 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.*;
 
 
+/**
+ *
+ */
 @Slf4j
 public class HousieGameState implements GameState<Integer> {
     private final List<WinningCombination> winningCombinations;
@@ -77,9 +80,7 @@ public class HousieGameState implements GameState<Integer> {
 
             for (Block[] blocks : contents) {
                 for (Block block : blocks) {
-
-                    Integer num = block.getNumber();
-                    if (Objects.nonNull(num) && num.equals(calledNumber)) {
+                    if (Objects.nonNull(block) && block.getNumber().equals(calledNumber)) {
                         block.setSelected(true);
                         selectedHousieTickets.add(housieTicket);
                         found = true;

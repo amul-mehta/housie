@@ -28,7 +28,7 @@ public class TopLine implements WinningCombination {
     public boolean evaluate(HousieTicket housieTicket) {
         Block[][] blocks = housieTicket.getTicket();
         for (Block element : blocks[0]) {
-            if (Objects.nonNull(element.getNumber()) && !element.isSelected())
+            if (Objects.nonNull(element) && !element.isSelected())
                 return false;
         }
         return true;

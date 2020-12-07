@@ -11,10 +11,7 @@ import com.app.housie.core.combination.impl.TopLine;
 import com.app.housie.core.generator.Generator;
 import com.app.housie.core.generator.impl.GeneratorFactory;
 import com.app.housie.core.generator.impl.NumberGenerator;
-import com.app.housie.model.Block;
-import com.app.housie.model.HousieParams;
-import com.app.housie.model.HousieTicket;
-import com.app.housie.model.Player;
+import com.app.housie.model.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -25,20 +22,26 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+/**
+ *
+ */
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 public class HousieGame implements Game {
     private static final List<WinningCombination> WINNING_COMBINATIONS = Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
-
     private static final Scanner CONSOLE_INPUT_SCANNER = new Scanner(System.in);
 
     private GameConfig<HousieParams> gameConfig;
     private Generator<Block[][]> ticketGenerator;
     private GameState<Integer> gameState;
+    private Caller caller;
     private boolean toQuit;
 
+    /**
+     *
+     */
     @Override
-    public void init() {
+    public boolean init() {
         this.gameConfig = new ConsoleInputGameConfig();
         this.getGameConfig().init(getConsoleInputScanner());
         this.toQuit = getGameConfig().isInterrupted();
@@ -54,15 +57,25 @@ public class HousieGame implements Game {
             log.info("**** Tickets Created Successfully ****");
 
             this.gameState = new HousieGameState(WINNING_COMBINATIONS, housieTickets);
+
+            NumberGenerator randomNumberGenerator =
+                    GeneratorFactory.getNumberGenerator(1, getGameConfig().getParams().getMaxNumRange());
+            this.caller =
+                    Caller.builder()
+                            .name("Caller")
+                            .randomNumberGenerator(randomNumberGenerator)
+                            .build();
         }
+        return !toQuit;
     }
 
 
+    /**
+     *
+     */
     @Override
     public void play() {
         boolean gameFinished = false;
-        Generator<Integer> ticketRandomNumberGenerator = getRandomNumberGeneratorInstance();
-
         while (!isToQuit()) {
             log.info("Press 'N' generate a new Number");
             String input = getConsoleInputScanner().nextLine();
@@ -71,7 +84,7 @@ public class HousieGame implements Game {
                     this.toQuit = true;
                     break;
                 case Constants.OPTION_NEW_NUMBER:
-                    int currentNumber = ticketRandomNumberGenerator.generate();
+                    int currentNumber = getCaller().callNumber();
                     log.info("Next number is: {}", currentNumber);
                     getGameState().updateState(currentNumber);
                     this.toQuit = gameFinished = getGameState().isCompleted();
@@ -87,6 +100,10 @@ public class HousieGame implements Game {
         }
     }
 
+    /**
+     * @param playerCount
+     * @return
+     */
     private HousieTicket generateHousieTicket(int playerCount) {
         Player player =
                 Player.builder()
@@ -98,10 +115,6 @@ public class HousieGame implements Game {
                 .player(player)
                 .ticket(ticket)
                 .build();
-    }
-
-    NumberGenerator getRandomNumberGeneratorInstance() {
-        return GeneratorFactory.getNumberGenerator(1, getGameConfig().getParams().getMaxNumRange());
     }
 
     public static Scanner getConsoleInputScanner() {

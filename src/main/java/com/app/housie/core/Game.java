@@ -1,6 +1,14 @@
 package com.app.housie.core;
 
 public interface Game {
-    void init();
+
+    /**
+     * @return
+     */
+    boolean init();
+
+    /**
+     *
+     */
     void play();
 }

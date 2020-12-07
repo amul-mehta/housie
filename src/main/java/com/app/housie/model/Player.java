@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class Player {
+public class Player implements Person {
     private final String name;
 }

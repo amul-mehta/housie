@@ -12,20 +12,22 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 @Slf4j
+@Getter
 @Setter(AccessLevel.PRIVATE)
 public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
-    @Getter(AccessLevel.PUBLIC)
     private boolean interrupted;
-    @Getter(AccessLevel.PUBLIC)
     private HousieParams params;
     @Getter(AccessLevel.PRIVATE)
     private Scanner inputScanner;
 
+    /**
+     * @param scanner
+     */
     @Override
     public void init(Scanner scanner) {
+        setInputScanner(scanner);
         boolean toQuit = false;
         while (!toQuit) {
-            setInputScanner(scanner);
             log.info("Enter the number range (1-n)");
             int maxNumRange = getIntegerValueFromConsole();
             if (isInterrupted())
@@ -66,6 +68,9 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
     }
 
 
+    /**
+     * @return
+     */
     private int getIntegerValueFromConsole() {
         boolean toQuit = false;
         int val = -1;
@@ -87,6 +92,9 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         return val;
     }
 
+    /**
+     * @return
+     */
     private int[] getTicketSize() {
         boolean toQuit = false;
         int[] ticketSize = new int[]{};
@@ -121,6 +129,4 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         }
         return ticketSize;
     }
-
-
 }

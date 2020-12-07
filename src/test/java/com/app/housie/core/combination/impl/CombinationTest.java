@@ -37,7 +37,7 @@ public class CombinationTest {
         WinningCombination topLineWinningCombination = new TopLine();
         Block[][] sampleTicket = TestUtils.getSampleTicket();
         for (Block block : sampleTicket[0]) {
-            if (Objects.nonNull(block.getNumber()))
+            if (Objects.nonNull(block))
                 block.setSelected(true);
         }
         HousieTicket housieTicket = HousieTicket.builder().ticket(sampleTicket).player(Player.builder().name("SamplePlayer").build()).build();
@@ -58,7 +58,7 @@ public class CombinationTest {
         Block[][] sampleTicket = TestUtils.getSampleTicket();
         for (Block[] blocks : sampleTicket) {
             for (Block block : blocks) {
-                if (Objects.nonNull(block.getNumber()))
+                if (Objects.nonNull(block))
                     block.setSelected(true);
             }
         }
@@ -71,7 +71,7 @@ public class CombinationTest {
         WinningCombination fullHouseWinningCombination = new FullHouse();
         Block[][] sampleTicket = TestUtils.getSampleTicket();
         for (Block block : sampleTicket[0]) {
-            if (Objects.nonNull(block.getNumber()))
+            if (Objects.nonNull(block))
                 block.setSelected(true);
         }
         HousieTicket housieTicket = HousieTicket.builder().ticket(sampleTicket).player(Player.builder().name("SamplePlayer").build()).build();
@@ -94,7 +94,7 @@ public class CombinationTest {
         int count = 0;
         for (Block[] blocks : sampleTicket) {
             for (Block block : blocks) {
-                if (Objects.nonNull(block.getNumber())) {
+                if (Objects.nonNull(block)) {
                     block.setSelected(true);
                     if (++count == Constants.EARLY_FIVE_THRESHOLD)
                         break;
@@ -122,7 +122,7 @@ public class CombinationTest {
         int count = 0;
         for (Block[] blocks : sampleTicket) {
             for (Block block : blocks) {
-                if (Objects.nonNull(block.getNumber())) {
+                if (Objects.nonNull(block)) {
                     block.setSelected(true);
                     if (++count == 4)
                         break;

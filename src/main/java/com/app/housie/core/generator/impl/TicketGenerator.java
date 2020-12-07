@@ -8,17 +8,28 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
-
+/**
+ * Generates a Ticket based on the game parameters.
+ * A ticket is a two Dimensional Array of Block object
+ * The Block object stores the number and a flag that tells if the number is selected or not
+ * initially all the numbers are marked as not selected
+ */
 @Slf4j
 @Getter(AccessLevel.PRIVATE)
 public class TicketGenerator implements Generator<Block[][]> {
     private final HousieParams gameParams;
 
+    /**
+     * @param gameConfig
+     */
     TicketGenerator(HousieParams gameConfig) {
         this.gameParams = gameConfig;
     }
 
+    /**
+     * @return
+     */
+    @Override
     public Block[][] generate() {
         int[] boardSize = getGameParams().getTicketSize();
         int rowCount = boardSize[0];
@@ -29,7 +40,6 @@ public class TicketGenerator implements Generator<Block[][]> {
 
         for (int i = 0; i < board.length; i++) {
             Block[] row = board[i];
-            Arrays.fill(row, Block.builder().build());
             int rowSize = row.length;
             Generator<Integer> positionGenerator = GeneratorFactory.getNumberGenerator(0, rowSize - 1);
 
