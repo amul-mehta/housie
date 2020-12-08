@@ -90,7 +90,7 @@ public class LocalGameState implements GameState<Integer> {
 
             for (Block[] blocks : contents) {
                 for (Block block : blocks) {
-                    if (Objects.nonNull(block) && block.getNumber().equals(calledNumber)) {
+                    if (Objects.nonNull(block) && block.getNumber() == calledNumber) {
                         block.setSelected(true);
                         selectedHousieTickets.add(housieTicket);
                         found = true;

@@ -11,7 +11,7 @@ public class Caller implements Person {
     private final String name;
     private final Generator<Integer> randomNumberGenerator;
 
-    public Integer callNumber(){
+    public int callNumber(){
         return getRandomNumberGenerator().generate();
     }
 }

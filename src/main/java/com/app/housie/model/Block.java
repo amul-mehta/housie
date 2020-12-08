@@ -10,7 +10,7 @@ import lombok.ToString;
 @Builder
 @ToString
 public class Block {
-    private final Integer number;
+    private final int number;
 
     @Setter
     private boolean selected;
