@@ -97,7 +97,8 @@ public class HousieGameState implements GameState<Integer> {
     }
 
     /**
-     * Prints the per Player summary of all the winning combinations that are present in their respective ticket
+     * Prints the per {@link Player} summary of all the winning combinations
+     * that are present in each {@link Player}'s respective ticket
      */
     @Override
     public void printSummary() {

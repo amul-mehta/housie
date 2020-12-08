@@ -20,14 +20,18 @@ public class TicketGenerator implements Generator<Block[][]> {
     private final HousieParams gameParams;
 
     /**
-     * @param gameConfig
+     * @param gameConfig game configuration based on which the ticket should be created
      */
     TicketGenerator(HousieParams gameConfig) {
         this.gameParams = gameConfig;
     }
 
     /**
-     * @return
+     * This function generates a ticket with following properties :
+     * It creates a ticket of {@link HousieParams#getTicketSize()}
+     * and populates {@link HousieParams#getNumOfPlayers()}  unique numbers in each row
+     * where each number is between {@link Constants#DEFAULT_MIN_NUM_RANGE} and {@link HousieParams#getMaxNumRange()}
+     * @return the generated Ticket
      */
     @Override
     public Block[][] generate() {

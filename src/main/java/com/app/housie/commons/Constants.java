@@ -1,6 +1,18 @@
 package com.app.housie.commons;
 
+import com.app.housie.core.combination.WinningCombination;
+import com.app.housie.core.combination.impl.EarlyFive;
+import com.app.housie.core.combination.impl.FullHouse;
+import com.app.housie.core.combination.impl.TopLine;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
 public class Constants {
+    public static final List<WinningCombination> WINNING_COMBINATIONS = Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
+    public static final Scanner CONSOLE_INPUT_SCANNER = new Scanner(System.in);
+    public static final String CALLER = "Caller";
     public static final String OPTION_QUIT = "Q";
     public static final String OPTION_NEW_NUMBER = "N";
     public static final String TICKET_SIZE_SPLIT_STR = "X";

@@ -11,6 +11,10 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * This class implements a way to set the input parameters by getting input user from console
+ * User will be promp
+ */
 @Slf4j
 @Getter
 @Setter(AccessLevel.PRIVATE)
@@ -20,20 +24,29 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
     @Getter(AccessLevel.PRIVATE)
     private Scanner inputScanner;
 
+    public ConsoleInputGameConfig(Scanner inputScanner){
+        this.inputScanner = inputScanner;
+    }
+
+
+
     /**
-     * @param scanner
+     * this function populates the parameters value by taking input from user
+     * the function will keep trying to get input from the user until either
+     *  - a valid input combination is received
+     *  - user interrupts by entering quit option
+     *  In case of user chooses to quit, {@link isInterrupted()} will return true
      */
     @Override
-    public void init(Scanner scanner) {
-        setInputScanner(scanner);
+    public void init() {
         boolean toQuit = false;
         while (!toQuit) {
             log.info("Enter the number range (1-n)");
-            int maxNumRange = getIntegerValueFromConsole();
+            int maxNumRange = getIntegerValue();
             if (isInterrupted())
                 return;
             log.info("Enter Number of Players playing the game");
-            int maxPlayers = getIntegerValueFromConsole();
+            int maxPlayers = getIntegerValue();
             if (isInterrupted())
                 return;
             log.info("Enter the ticket size in  \"<ROW_SIZE>X<COLUMN_SIZE>\" format (defaults to 3 X 10, press return to keep default value)");
@@ -41,7 +54,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
             if (isInterrupted())
                 return;
             log.info("Enter Numbers per Row");
-            int maxNumsPerRow = getIntegerValueFromConsole();
+            int maxNumsPerRow = getIntegerValue();
             if (!isInterrupted()) {
                 if (ticketSize.length == 0)
                     setParams(
@@ -69,9 +82,13 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
 
 
     /**
-     * @return
+     * This function gets the input from the scanner until a valid integer value or
+     * the Quit option is returned by the scanner.
+     * In case the quit option is received, {@link isInteruppted()} will return true
+     * and the returned value should not be used by the caller
+     * @return integer value received from scanner
      */
-    private int getIntegerValueFromConsole() {
+    private int getIntegerValue() {
         boolean toQuit = false;
         int val = -1;
         while (!toQuit) {
@@ -93,7 +110,11 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
     }
 
     /**
-     * @return
+     * This function gets the input from the scanner until a properly formatted ticket size is received or
+     * the Quit option is returned by the scanner.
+     * In case the quit option is received, {@link interrupted} will return true
+     * and the returned value should not be used by the caller
+     * @return size of ticket received from scanner
      */
     private int[] getTicketSize() {
         boolean toQuit = false;

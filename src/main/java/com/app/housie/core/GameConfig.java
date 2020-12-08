@@ -11,9 +11,9 @@ public interface GameConfig<V extends GameParams> {
     V getParams();
 
     /**
-     * @param scanner
+     *
      */
-    void init(Scanner scanner);
+    void init();
 
     /**
      * @return

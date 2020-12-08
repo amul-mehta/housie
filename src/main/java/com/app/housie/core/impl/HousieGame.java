@@ -4,7 +4,6 @@ import com.app.housie.commons.Constants;
 import com.app.housie.core.Game;
 import com.app.housie.core.GameConfig;
 import com.app.housie.core.GameState;
-import com.app.housie.core.combination.WinningCombination;
 import com.app.housie.core.combination.impl.EarlyFive;
 import com.app.housie.core.combination.impl.FullHouse;
 import com.app.housie.core.combination.impl.TopLine;
@@ -16,20 +15,22 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- *
+ * This is the driver class that is responsible for initializing the housie game parameters and ultimately
+ * controlling the gameplay based on the user input
+ * The game is configured to have three winning combinations one or more players can fall into :
+ * {@link TopLine}, {@link EarlyFive}, {@link FullHouse}
+ * The game parameters are requested from the user via the console.
+ * At the end of successful game a summary of players and their winning combination is printed
  */
 @Slf4j
 @Getter(AccessLevel.PACKAGE)
 public class HousieGame implements Game {
-    private static final List<WinningCombination> WINNING_COMBINATIONS = Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
-    private static final Scanner CONSOLE_INPUT_SCANNER = new Scanner(System.in);
 
     private GameConfig<HousieParams> gameConfig;
     private Generator<Block[][]> ticketGenerator;
@@ -37,38 +38,48 @@ public class HousieGame implements Game {
     private Caller caller;
     private boolean toQuit;
 
+
     /**
-     *
+     * initializes the Game by
+     *  - initializing game parameters by taking input from user via console
+     *  - generating {@link HousieTicket} for each {@link Player} defined in the {@link HousieParams#getNumOfPlayers()}
+     *  - initializing game state to keep track of the players and their winning combinations
+     *  - initializes {@link Caller} that is responsible for generating Random Numbers
+     *  User has an option to interrupt the initialization process when it is being asked for input
+     *  by entering {@link Constants.OPTION_QUIT}
+     * @return if the initialization was interrupted
      */
     @Override
     public boolean init() {
-        this.gameConfig = new ConsoleInputGameConfig();
-        this.getGameConfig().init(getConsoleInputScanner());
-        this.toQuit = getGameConfig().isInterrupted();
+        initializeGameConfig();
 
-        if (!toQuit) {
-            this.ticketGenerator = GeneratorFactory.getTicketGenerator(getGameConfig().getParams());
+        if (!isToQuit()) {
+            List<HousieTicket> housieTickets = initializeHousieTickets();
 
-            List<HousieTicket> housieTickets =
-                    IntStream.range(0, getGameConfig().getParams().getNumOfPlayers())
-                            .mapToObj(this::generateHousieTicket)
-                            .collect(Collectors.toList());
+            initializeGameState(housieTickets);
 
-            log.info("**** Tickets Created Successfully ****");
-
-            this.gameState = new HousieGameState(WINNING_COMBINATIONS, housieTickets);
-
-            NumberGenerator randomNumberGenerator =
-                    GeneratorFactory.getNumberGenerator(1, getGameConfig().getParams().getMaxNumRange());
-            this.caller =
-                    Caller.builder()
-                            .name("Caller")
-                            .randomNumberGenerator(randomNumberGenerator)
-                            .build();
+            initializeCaller();
         }
-        return !toQuit;
+        return !isToQuit();
     }
 
+    /**
+     * this function initializes the game state by passing the allowed winning combinations
+     * and the initial generated tickets
+     * @param housieTickets housie tickets for each player to initialize the state
+     */
+    private void initializeGameState(List<HousieTicket> housieTickets) {
+        this.gameState = new HousieGameState(Constants.WINNING_COMBINATIONS, housieTickets);
+    }
+
+    /**
+     *
+     */
+    private void initializeGameConfig() {
+        this.gameConfig = new ConsoleInputGameConfig(getConsoleInputScanner());
+        getGameConfig().init();
+        this.toQuit = getGameConfig().isInterrupted();
+    }
 
     /**
      *
@@ -79,25 +90,63 @@ public class HousieGame implements Game {
         while (!isToQuit()) {
             log.info("Press 'N' generate a new Number");
             String input = getConsoleInputScanner().nextLine();
-            switch (input) {
-                case Constants.OPTION_QUIT:
-                    this.toQuit = true;
-                    break;
-                case Constants.OPTION_NEW_NUMBER:
-                    int currentNumber = getCaller().callNumber();
-                    log.info("Next number is: {}", currentNumber);
-                    getGameState().updateState(currentNumber);
-                    this.toQuit = gameFinished = getGameState().isCompleted();
-                    break;
-                default:
-                    log.error("Un-recognized option, please try again");
-                    break;
-            }
+            gameFinished = handleInput(input);
         }
         if (gameFinished) {
             log.info("**** Game Over ****");
             getGameState().printSummary();
         }
+    }
+
+    /**
+     * @param input
+     * @return
+     */
+    private boolean handleInput(String input) {
+        boolean gameFinished = false;
+        switch (input) {
+            case Constants.OPTION_QUIT:
+                this.toQuit = true;
+                break;
+            case Constants.OPTION_NEW_NUMBER:
+                int currentNumber = getCaller().callNumber();
+                log.info("Next number is: {}", currentNumber);
+                getGameState().updateState(currentNumber);
+                this.toQuit = gameFinished = getGameState().isCompleted();
+                break;
+            default:
+                log.error("Un-recognized option, please try again");
+                break;
+        }
+        return gameFinished;
+    }
+
+    /**
+     *
+     */
+    private void initializeCaller() {
+        NumberGenerator randomNumberGenerator =
+                GeneratorFactory.getNumberGenerator(1, getGameConfig().getParams().getMaxNumRange());
+        this.caller =
+                Caller.builder()
+                        .name(Constants.CALLER)
+                        .randomNumberGenerator(randomNumberGenerator)
+                        .build();
+    }
+
+    /**
+     * @return
+     */
+    private List<HousieTicket> initializeHousieTickets() {
+        this.ticketGenerator = GeneratorFactory.getTicketGenerator(getGameConfig().getParams());
+
+        List<HousieTicket> housieTickets =
+                IntStream.range(0, getGameConfig().getParams().getNumOfPlayers())
+                        .mapToObj(this::generateHousieTicket)
+                        .collect(Collectors.toList());
+
+        log.info("**** Tickets Created Successfully ****");
+        return housieTickets;
     }
 
     /**
@@ -117,10 +166,12 @@ public class HousieGame implements Game {
                 .build();
     }
 
+    /**
+     * @return console scanner instance for user input
+     */
     public static Scanner getConsoleInputScanner() {
-        return CONSOLE_INPUT_SCANNER;
+        return Constants.CONSOLE_INPUT_SCANNER;
     }
-
 
 }
 
