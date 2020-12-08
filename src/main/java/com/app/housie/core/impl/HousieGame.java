@@ -38,15 +38,14 @@ public class HousieGame implements Game {
     private Caller caller;
     private boolean toQuit;
 
-
     /**
-     * initializes the Game by
+     * initializes the Game by :
      *  - initializing game parameters by taking input from user via console
      *  - generating {@link HousieTicket} for each {@link Player} defined in the {@link HousieParams#getNumOfPlayers()}
      *  - initializing game state to keep track of the players and their winning combinations
      *  - initializes {@link Caller} that is responsible for generating Random Numbers
      *  User has an option to interrupt the initialization process when it is being asked for input
-     *  by entering {@link Constants.OPTION_QUIT}
+     *  by entering {@link Constants#OPTION_QUIT}
      * @return if the initialization was interrupted
      */
     @Override
@@ -55,9 +54,7 @@ public class HousieGame implements Game {
 
         if (!isToQuit()) {
             List<HousieTicket> housieTickets = initializeHousieTickets();
-
             initializeGameState(housieTickets);
-
             initializeCaller();
         }
         return !isToQuit();
@@ -69,11 +66,12 @@ public class HousieGame implements Game {
      * @param housieTickets housie tickets for each player to initialize the state
      */
     private void initializeGameState(List<HousieTicket> housieTickets) {
-        this.gameState = new HousieGameState(Constants.WINNING_COMBINATIONS, housieTickets);
+        this.gameState = new LocalGameState(Constants.WINNING_COMBINATIONS, housieTickets);
     }
 
     /**
-     *
+     * this function initializes the game config making the user to input the params from console
+     * and sets the {@link this#toQuit} flag if the user interrupted before completing to define the game params
      */
     private void initializeGameConfig() {
         this.gameConfig = new ConsoleInputGameConfig(getConsoleInputScanner());
@@ -82,13 +80,61 @@ public class HousieGame implements Game {
     }
 
     /**
-     *
+     * initializes the {@link Caller} by assigning a random number generator
+     */
+    private void initializeCaller() {
+        NumberGenerator randomNumberGenerator =
+                GeneratorFactory.getNumberGenerator(Constants.DEFAULT_MIN_NUM_RANGE,
+                        getGameConfig().getParams().getMaxNumRange());
+        this.caller =
+                Caller.builder()
+                        .name(Constants.CALLER)
+                        .randomNumberGenerator(randomNumberGenerator)
+                        .build();
+    }
+
+    /**
+     * initializes the ticket generator with game params and generates ticket for each of the player
+     * @return Housie tickets for all the players
+     */
+    private List<HousieTicket> initializeHousieTickets() {
+        this.ticketGenerator = GeneratorFactory.getTicketGenerator(getGameConfig().getParams());
+
+        List<HousieTicket> housieTickets =
+                IntStream.range(0, getGameConfig().getParams().getNumOfPlayers())
+                        .mapToObj(this::generateHousieTicket)
+                        .collect(Collectors.toList());
+
+        log.info("**** Tickets Created Successfully ****");
+        return housieTickets;
+    }
+
+    /**
+     * @param playerCount number of tickets to create
+     * @return housie ticket
+     */
+    private HousieTicket generateHousieTicket(int playerCount) {
+        Player player =
+                Player.builder()
+                        .name(Constants.PLAYER_NAME_PREFIX + playerCount)
+                        .build();
+        Block[][] ticket = getTicketGenerator().generate();
+        log.debug("Player {}, Ticket {}", player.getName(), ticket);
+        return HousieTicket.builder()
+                .player(player)
+                .ticket(ticket)
+                .build();
+    }
+
+    /**
+     * this function controls the Gameplay based on user's input
+     * In case of all the combinations have been claimed, per player game summary is printed.
      */
     @Override
     public void play() {
         boolean gameFinished = false;
         while (!isToQuit()) {
-            log.info("Press 'N' generate a new Number");
+            log.info("Press '{}' generate a new Number", Constants.OPTION_NEW_NUMBER);
             String input = getConsoleInputScanner().nextLine();
             gameFinished = handleInput(input);
         }
@@ -99,8 +145,11 @@ public class HousieGame implements Game {
     }
 
     /**
-     * @param input
-     * @return
+     * if user inputs {@link Constants#OPTION_NEW_NUMBER} then random number is called by the defined {@link Caller}
+     * instance and state is updated based on the number generated.
+     * if the user inputs {@link Constants#OPTION_QUIT} then game is terminated
+     * @param input user input
+     * @return if all the winning combinations have been claimed
      */
     private boolean handleInput(String input) {
         boolean gameFinished = false;
@@ -119,51 +168,6 @@ public class HousieGame implements Game {
                 break;
         }
         return gameFinished;
-    }
-
-    /**
-     *
-     */
-    private void initializeCaller() {
-        NumberGenerator randomNumberGenerator =
-                GeneratorFactory.getNumberGenerator(1, getGameConfig().getParams().getMaxNumRange());
-        this.caller =
-                Caller.builder()
-                        .name(Constants.CALLER)
-                        .randomNumberGenerator(randomNumberGenerator)
-                        .build();
-    }
-
-    /**
-     * @return
-     */
-    private List<HousieTicket> initializeHousieTickets() {
-        this.ticketGenerator = GeneratorFactory.getTicketGenerator(getGameConfig().getParams());
-
-        List<HousieTicket> housieTickets =
-                IntStream.range(0, getGameConfig().getParams().getNumOfPlayers())
-                        .mapToObj(this::generateHousieTicket)
-                        .collect(Collectors.toList());
-
-        log.info("**** Tickets Created Successfully ****");
-        return housieTickets;
-    }
-
-    /**
-     * @param playerCount
-     * @return
-     */
-    private HousieTicket generateHousieTicket(int playerCount) {
-        Player player =
-                Player.builder()
-                        .name(Constants.PLAYER_NAME_PREFIX + playerCount)
-                        .build();
-        Block[][] ticket = getTicketGenerator().generate();
-        log.debug("Player {},Ticket {}", player.getName(), ticket);
-        return HousieTicket.builder()
-                .player(player)
-                .ticket(ticket)
-                .build();
     }
 
     /**

@@ -14,17 +14,22 @@ import java.util.*;
 
 
 /**
- *
+ * this class stores the state of game in memory. The state includes:
+ *  - All the winning combinations that are valid in this game
+ *  - All the tickets in their latest state
+ * this class is also responsible for keeping track if the game is completed (i.e. all the winning combinations are
+ * claimed by one or more players)
  */
 @Slf4j
-public class HousieGameState implements GameState<Integer> {
+@Getter(AccessLevel.PRIVATE)
+public class LocalGameState implements GameState<Integer> {
     private final List<WinningCombination> winningCombinations;
     @Getter(AccessLevel.PACKAGE)
     private final Map<WinningCombination, Player> currentState;
     private final List<HousieTicket> housieTickets;
 
-    public HousieGameState(List<WinningCombination> winningCombinations,
-                           List<HousieTicket> housieTickets) {
+    public LocalGameState(List<WinningCombination> winningCombinations,
+                          List<HousieTicket> housieTickets) {
         this.winningCombinations = winningCombinations;
         this.housieTickets = housieTickets;
         this.currentState = new HashMap<>();
@@ -35,14 +40,18 @@ public class HousieGameState implements GameState<Integer> {
      */
     @Override
     public boolean isCompleted() {
-        return currentState.size() == winningCombinations.size();
+        return getCurrentState().size() == getWinningCombinations().size();
     }
 
 
     /**
-     * Update
+     * when a number is called, check each ticket if the ticket has the number, if it does, then mark
+     * the number as selected, and check if the ticket is eligible to win one or more of the un-claimed
+     * winning combinations
      *
-     * @param calledNumber number called
+     * In case of tie, the winner is selected based on the order when tickets were initialized.
+     *
+     * @param calledNumber number called which can result in state update
      */
     @Override
     public void updateState(Integer calledNumber) {
@@ -56,24 +65,25 @@ public class HousieGameState implements GameState<Integer> {
      * @param matchingHousieTicket the ticket that is to be evaluated for winning combination(s)
      */
     private void updateCombinations(HousieTicket matchingHousieTicket) {
-        winningCombinations.forEach(c -> {
-            if (!currentState.containsKey(c) && c.evaluate(matchingHousieTicket)) {
-                currentState.put(c, matchingHousieTicket.getPlayer());
-                log.info("We have a winner: {} has won '{}' winning combination.", matchingHousieTicket.getPlayer().getName(), c.getName());
+        getWinningCombinations().forEach(combination -> {
+            if (!getCurrentState().containsKey(combination) && combination.evaluate(matchingHousieTicket)) {
+                getCurrentState().put(combination, matchingHousieTicket.getPlayer());
+                log.info("We have a winner: {} has won '{}' winning combination.",
+                        matchingHousieTicket.getPlayer().getName(), combination.getName());
             }
         });
     }
 
     /**
-     * TODO: fix the language
+     * for each ticket, mark if the number is present in the ticket
      *
-     * @param calledNumber the number to be checked for the ticket
-     * @return List of Tickets that have the number in their contents
+     * @param calledNumber the number to be searched
+     * @return tickets that have the number present
      */
     private List<HousieTicket> updateTickets(int calledNumber) {
         List<HousieTicket> selectedHousieTickets = new ArrayList<>();
         boolean found;
-        for (HousieTicket housieTicket : housieTickets) {
+        for (HousieTicket housieTicket : getHousieTickets()) {
 
             found = false;
             Block[][] contents = housieTicket.getTicket();
@@ -104,7 +114,7 @@ public class HousieGameState implements GameState<Integer> {
     public void printSummary() {
         Map<String, Set<String>> playerCombinationMap = new HashMap<>();
 
-        currentState.forEach((winningCombination, player) -> {
+        getCurrentState().forEach((winningCombination, player) -> {
             if (!playerCombinationMap.containsKey(player.getName()))
                 playerCombinationMap.put(player.getName(), new HashSet<>());
             playerCombinationMap.get(player.getName()).add(winningCombination.getName());
@@ -112,7 +122,7 @@ public class HousieGameState implements GameState<Integer> {
 
         log.info("=====================================");
         log.info("Summary");
-        housieTickets.stream()
+        getHousieTickets().stream()
                 .map(HousieTicket::getPlayer)
                 .forEach(player -> {
                     Set<String> combinationsWon = playerCombinationMap.getOrDefault(player.getName(), new HashSet<>());

@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.Arrays;
 import java.util.List;
 
-public class HousieGameStateTest {
+public class LocalGameStateTest {
 
     private static final List<WinningCombination> TEST_WINNING_COMBINATION_LIST = Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
 
@@ -38,7 +38,7 @@ public class HousieGameStateTest {
     @Test
     public void housieGameStateTest_PlayerOneWinsAllCombinations(){
         List<HousieTicket> housieTickets = initTicketsForTwoPlayers();
-        HousieGameState testState = new HousieGameState(TEST_WINNING_COMBINATION_LIST,housieTickets);
+        LocalGameState testState = new LocalGameState(TEST_WINNING_COMBINATION_LIST,housieTickets);
         testState.updateState(11);
         Assert.assertFalse(testState.isCompleted());
         Assert.assertEquals(0, testState.getCurrentState().size());
@@ -78,7 +78,7 @@ public class HousieGameStateTest {
     @Test
     public void housieGameStateTest_PlayerOneWinsOneAndOtherWinsTwo(){
         List<HousieTicket> housieTickets = initTicketsForTwoPlayers();
-        HousieGameState testState = new HousieGameState(TEST_WINNING_COMBINATION_LIST,housieTickets);
+        LocalGameState testState = new LocalGameState(TEST_WINNING_COMBINATION_LIST,housieTickets);
         testState.updateState(11);
         Assert.assertFalse(testState.isCompleted());
         Assert.assertEquals(0, testState.getCurrentState().size());

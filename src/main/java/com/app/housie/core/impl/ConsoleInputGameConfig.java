@@ -49,7 +49,8 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
             int maxPlayers = getIntegerValue();
             if (isInterrupted())
                 return;
-            log.info("Enter the ticket size in  \"<ROW_SIZE>X<COLUMN_SIZE>\" format (defaults to 3 X 10, press return to keep default value)");
+            log.info("Enter the ticket size in  \"<ROW_SIZE>X<COLUMN_SIZE>\" format " +
+                    "(defaults to 3 X 10, press return to keep default value)");
             int[] ticketSize = getTicketSize();
             if (isInterrupted())
                 return;

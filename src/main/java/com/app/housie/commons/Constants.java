@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Constants {
-    public static final List<WinningCombination> WINNING_COMBINATIONS = Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
+    public static final List<WinningCombination> WINNING_COMBINATIONS =
+            Arrays.asList(new TopLine(), new EarlyFive(), new FullHouse());
     public static final Scanner CONSOLE_INPUT_SCANNER = new Scanner(System.in);
     public static final String CALLER = "Caller";
     public static final String OPTION_QUIT = "Q";
