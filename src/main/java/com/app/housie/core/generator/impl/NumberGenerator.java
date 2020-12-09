@@ -3,6 +3,7 @@ package com.app.housie.core.generator.impl;
 import com.app.housie.core.generator.Generator;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.stream.IntStream;
 /**
  * Generates Unique Random Numbers between a given range
  */
+@Slf4j
 @Getter(AccessLevel.PACKAGE)
 public class NumberGenerator implements Generator<Integer> {
     private final List<Integer> remainingNumbers;
@@ -36,6 +38,8 @@ public class NumberGenerator implements Generator<Integer> {
      */
     @Override
     public Integer generate() {
-        return getRemainingNumbers().remove(remainingNumbers.size() - 1);
+        int lastIndex = getRemainingNumbers().size() - 1;
+        log.debug("Last index of list {}", lastIndex);
+        return getRemainingNumbers().remove(lastIndex);
     }
 }

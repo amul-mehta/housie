@@ -35,7 +35,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
      * the function will keep trying to get input from the user until either
      *  - a valid input combination is received
      *  - user interrupts by entering quit option
-     *  In case of user chooses to quit, {@link isInterrupted()} will return true
+     *  In case of user chooses to quit, {@link this#isInterrupted()} will return true
      */
     @Override
     public void init() {
@@ -85,7 +85,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
     /**
      * This function gets the input from the scanner until a valid integer value or
      * the Quit option is returned by the scanner.
-     * In case the quit option is received, {@link isInteruppted()} will return true
+     * In case the quit option is received, {@link this#isInterrupted()} will return true
      * and the returned value should not be used by the caller
      * @return integer value received from scanner
      */
@@ -113,7 +113,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
     /**
      * This function gets the input from the scanner until a properly formatted ticket size is received or
      * the Quit option is returned by the scanner.
-     * In case the quit option is received, {@link interrupted} will return true
+     * In case the quit option is received, {@link this#isInterrupted()} will return true
      * and the returned value should not be used by the caller
      * @return size of ticket received from scanner
      */
@@ -121,14 +121,14 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         boolean toQuit = false;
         int[] ticketSize = new int[]{};
         while (!toQuit) {
-            String boardSizeStr = getInputScanner().nextLine();
+            String boardSizeStr = getInputScanner().nextLine().trim();
             try {
                 if (boardSizeStr.equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
                     setInterrupted(true);
                 } else {
                     // use default value
-                    if (boardSizeStr.trim().length() == 0) {
+                    if (boardSizeStr.length() == 0) {
                         toQuit = true;
                         continue;
                     }

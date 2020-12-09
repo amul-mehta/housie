@@ -101,7 +101,7 @@ public class HousieGame implements Game {
         this.ticketGenerator = GeneratorFactory.getTicketGenerator(getGameConfig().getParams());
 
         List<HousieTicket> housieTickets =
-                IntStream.range(0, getGameConfig().getParams().getNumOfPlayers())
+                IntStream.rangeClosed(1, getGameConfig().getParams().getNumOfPlayers())
                         .mapToObj(this::generateHousieTicket)
                         .collect(Collectors.toList());
 
@@ -153,7 +153,7 @@ public class HousieGame implements Game {
      */
     private boolean handleInput(String input) {
         boolean gameFinished = false;
-        switch (input) {
+        switch (input.toUpperCase()) {
             case Constants.OPTION_QUIT:
                 this.toQuit = true;
                 break;
