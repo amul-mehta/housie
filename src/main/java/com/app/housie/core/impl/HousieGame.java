@@ -50,6 +50,7 @@ public class HousieGame implements Game {
      */
     @Override
     public boolean init() {
+        log.info("Press '{}' anytime to Quit the game", Constants.OPTION_QUIT);
         initializeGameConfig();
 
         if (!isToQuit()) {
@@ -134,7 +135,7 @@ public class HousieGame implements Game {
     public void play() {
         boolean gameFinished = false;
         while (!isToQuit()) {
-            log.info("Press '{}' generate a new Number", Constants.OPTION_NEW_NUMBER);
+            log.info("Press '{}' to generate a new Number", Constants.OPTION_NEW_NUMBER);
             String input = getConsoleInputScanner().nextLine();
             gameFinished = handleInput(input);
         }
