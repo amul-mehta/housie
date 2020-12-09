@@ -95,7 +95,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         while (!toQuit) {
             String intStr = getInputScanner().nextLine();
             try {
-                if (intStr.equals(Constants.OPTION_QUIT)) {
+                if (intStr.toUpperCase().equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
                     setInterrupted(true);
                 } else {
@@ -123,7 +123,7 @@ public class ConsoleInputGameConfig implements GameConfig<HousieParams> {
         while (!toQuit) {
             String boardSizeStr = getInputScanner().nextLine().trim();
             try {
-                if (boardSizeStr.equals(Constants.OPTION_QUIT)) {
+                if (boardSizeStr.toUpperCase().equals(Constants.OPTION_QUIT)) {
                     toQuit = true;
                     setInterrupted(true);
                 } else {
