@@ -139,7 +139,7 @@ public class HousieGame implements Game {
             gameFinished = handleInput(input);
         }
         if (gameFinished) {
-            log.info("**** Game Over ****");
+            log.info("\n\n**** Game Over ****");
             getGameState().printSummary();
         }
     }
